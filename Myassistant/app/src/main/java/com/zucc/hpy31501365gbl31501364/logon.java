@@ -20,6 +20,7 @@ public class logon extends AppCompatActivity {
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private SharedPreferences pre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,21 +32,21 @@ public class logon extends AppCompatActivity {
         final EditText Password = (EditText)findViewById(R.id.password);
         final CheckBox Remember = (CheckBox)findViewById(R.id.rember);
         pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        pre = getSharedPreferences("data", MODE_PRIVATE);
         boolean isRemember = pref.getBoolean("remember", false);
         if(isRemember){
-            String U = pref.getString("username", "");
-            String P = pref.getString("password", "");
+            String U = pre.getString("username", "");
+            String P = pre.getString("password", "");
             Username.setText(U);
             Password.setText(P);
             Remember.setChecked(true);
-            System.out.println("Username:" + U);
         }
         Logon.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 String U = Username.getText().toString();
                 String P = Password.getText().toString();
-                SharedPreferences pre = getSharedPreferences("data", MODE_PRIVATE);
+//                SharedPreferences pre = getSharedPreferences("data", MODE_PRIVATE);
                 // TODO 发请求到后台
                 if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
                     editor = pref.edit();
@@ -73,10 +74,4 @@ public class logon extends AppCompatActivity {
             }
         });
     }
-
-    // 帐号密码存入sharedPrefereces
-    // Todo
-
-    // post后台
-    // Todo
 }
