@@ -1,1 +1,3 @@
 # bigwork
+安卓端在Myassistant目录下
+后台在androidb目录下
