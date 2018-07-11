@@ -9,11 +9,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
+
 /**
  * Created by L-Jere on 2018/7/10.
  */
 
 public class sign_up extends AppCompatActivity {
+
+    private final String URL = "http://10.0.2.2:3000/users/register";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +63,43 @@ public class sign_up extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"两次密码不相等",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    // TODO 注册信息传到后台
-                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                    editor.putString("name", N);
-                    editor.putString("username",Un);
-                    editor.putString("password",P1);
-                    editor.commit();
-                    finish();
-                    Toast.makeText(getApplicationContext(),"注册成功",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(sign_up.this,logon.class);
-                    startActivity(intent);
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId",Un)
+                            .add("userPwd",P1)
+                            .add("userName",N)
+                            .build();
+                    HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                }
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException{
+                                    String responseData = response.body().string();
+                                    try{
+                                        JSONObject jsonObject = new JSONObject(responseData);
+                                        final String status = jsonObject.getString("status");
+                                        runOnUiThread(new Runnable(){
+                                            @Override
+                                            public void run() {
+                                                if (status.equals("1000")) {
+                                                    Toast.makeText(getApplicationContext(),"用户已存在",Toast.LENGTH_SHORT).show();
+                                                }
+                                                else if(status.equals("1")){
+                                                    Toast.makeText(getApplicationContext(),"注册成功",Toast.LENGTH_SHORT).show();
+                                                    Intent intent = new Intent(sign_up.this, logon.class);
+                                                    startActivity(intent);
+                                                }
+                                                else{
+                                                    Toast.makeText(getApplicationContext(),"注册信息有误",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                    });
                 }
             }
         });

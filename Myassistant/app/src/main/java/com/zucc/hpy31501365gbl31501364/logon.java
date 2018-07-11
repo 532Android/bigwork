@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
-import com.zucc.hpy31501365gbl31501364.Util.Utill;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,9 +23,6 @@ import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.internal.Util;
-
-import static java.lang.Character.getType;
 
 /**
  * Created by L-Jere on 2018/7/10.
@@ -35,8 +31,8 @@ import static java.lang.Character.getType;
 public class logon extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
     private SharedPreferences pre;
+    private SharedPreferences.Editor editor;
     private final String URL = "http://10.0.2.2:3000/users/login";
 
     @Override
@@ -63,8 +59,7 @@ public class logon extends AppCompatActivity {
             public void onClick(View v) {
                 final String U = Username.getText().toString();
                 final String P = Password.getText().toString();
-//                SharedPreferences pre = getSharedPreferences("data", MODE_PRIVATE);
-                // TODO 发请求到后台
+
                 RequestBody requestBody = new FormBody.Builder()
                         .add("userId", U)
                         .add("userPwd", P)
@@ -72,7 +67,6 @@ public class logon extends AppCompatActivity {
                 HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-
                     }
 
                     @Override
@@ -85,35 +79,45 @@ public class logon extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     if (status.equals("1")) {
-                                       // TODO 判断后台数据是否和缓存数据一致
+                                        if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
+                                            editor = pref.edit();
+                                            if (Remember.isChecked()) {
+                                                editor.putBoolean("remember", true);
+                                            }
+                                            else{
+                                                editor.clear();
+                                            }
+                                            editor.commit();
+                                        }
+                                        else{
+                                            editor = pref.edit();
+                                            if (Remember.isChecked()) {
+                                                editor.putBoolean("remember", true);
+                                                editor.putString("username",U);
+                                                editor.putString("password",P);
+                                            }
+                                            else{
+                                                editor.clear();
+                                            }
+                                            editor.commit();
+                                        }
                                         Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                    } else {
+                                        Intent intent = new Intent(logon.this,MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else {
                                         Toast.makeText(logon.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                        } catch (JSONException e) {
+                        }
+                        catch (JSONException e) {
                             e.printStackTrace();
                         }
                         Log.d("logon", responseData);
                     }
                 });
-//                if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
-//                    editor = pref.edit();
-//                    if (Remember.isChecked()) {
-//                        editor.putBoolean("remember", true);
-//                    }
-//                    else{
-//                        editor.clear();
-//                    }
-//                    editor.commit();
-//                    Intent intent = new Intent(logon.this,MainActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                }
-//                else{
-//                    Toast.makeText(getApplicationContext(),"帐号或密码错误",Toast.LENGTH_SHORT).show();
-//                }
             }
         });
         Sign.setOnClickListener(new View.OnClickListener() {

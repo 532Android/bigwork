@@ -40,7 +40,7 @@ router.post('/register', function (req, res, next) {
       // 若用户已存在，返回提示信息，用户不存在，存入到数据库
       if (cdoc) {
         res.json({
-          status: '0',
+          status: '1000',
           msg: '',
           result: 'user has been registered!'
         });
