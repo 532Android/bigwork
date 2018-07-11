@@ -28,5 +28,10 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
+<<<<<<< HEAD
     testCompile 'junit:junit:4.12'
+=======
+    compile 'com.android.support:recyclerview-v7:26.+'
+    compile 'org.litepal.android:core:1.4.1'
+>>>>>>> origin/dev-hpy
 }
