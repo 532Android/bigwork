@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,13 +18,14 @@ import android.widget.Toast;
 public class logon extends AppCompatActivity {
 
     private SharedPreferences pref;
-    private SharedPreferences.Editor editor;
     private SharedPreferences pre;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.logon);
+
         Button Logon = (Button)findViewById(R.id.logon);
         final Button Sign = (Button)findViewById(R.id.sign);
         final EditText Username = (EditText)findViewById(R.id.username);
@@ -46,7 +46,6 @@ public class logon extends AppCompatActivity {
             public void onClick(View v) {
                 String U = Username.getText().toString();
                 String P = Password.getText().toString();
-//                SharedPreferences pre = getSharedPreferences("data", MODE_PRIVATE);
                 // TODO 发请求到后台
                 if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
                     editor = pref.edit();
