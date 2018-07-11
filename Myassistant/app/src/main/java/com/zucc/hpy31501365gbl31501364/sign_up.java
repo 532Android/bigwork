@@ -47,6 +47,7 @@ public class sign_up extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"两次密码不相等",Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    // TODO 注册信息传到后台
                     SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
                     editor.putString("name", N);
                     editor.putString("username",Un);
