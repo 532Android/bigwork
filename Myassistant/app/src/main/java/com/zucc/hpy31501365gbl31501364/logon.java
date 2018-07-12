@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
+import com.zucc.hpy31501365gbl31501364.Util.Utill;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,6 +69,8 @@ public class logon extends AppCompatActivity {
                 HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        //TODO 错误处理 关闭对话框 提示登录失败
+
                     }
 
                     @Override
@@ -93,7 +96,10 @@ public class logon extends AppCompatActivity {
                                             editors.commit();
                                         }
                                         else{
+<<<<<<< HEAD
                                             editors = pref.edit();
+=======
+>>>>>>> origin/dev-hpy
                                             editor = pre.edit();
                                             if (Remember.isChecked()) {
                                                 editors.putBoolean("remember", true);
@@ -108,6 +114,7 @@ public class logon extends AppCompatActivity {
                                             editor.commit();
                                             editors.commit();
                                         }
+                                        // TODO 加载对话框
                                         Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(logon.this,MainActivity.class);
                                         startActivity(intent);
