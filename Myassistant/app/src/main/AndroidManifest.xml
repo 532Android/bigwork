@@ -11,29 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".logon"
-<<<<<<< HEAD
-            android:label="@string/help">
-=======
-            android:label="@string/app_name">
->>>>>>> origin/dev-hpy
+            android:name=".logon">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
+
         <activity android:name=".MainActivity"/>
         <activity android:name=".sign_up"/>
         <activity android:name=".AddEventActivity"/>
 
-=======
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".sign_up"></activity>
->>>>>>> origin/dev-hpy
     </application>
 
 </manifest>

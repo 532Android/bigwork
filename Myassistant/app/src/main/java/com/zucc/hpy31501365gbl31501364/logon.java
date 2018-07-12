@@ -69,8 +69,8 @@ public class logon extends AppCompatActivity {
                 HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        //TODO 错误处理 关闭对话框 提示登录失败
-
+                        Utill.closeProgressDialog();
+                        Toast.makeText(logon.this, "登录失败", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -82,6 +82,7 @@ public class logon extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    Utill.showProgressDialog(logon.this,"请稍后");
                                     if (status.equals("1")) {
                                         if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
                                             editors = pref.edit();
@@ -96,10 +97,7 @@ public class logon extends AppCompatActivity {
                                             editors.commit();
                                         }
                                         else{
-<<<<<<< HEAD
                                             editors = pref.edit();
-=======
->>>>>>> origin/dev-hpy
                                             editor = pre.edit();
                                             if (Remember.isChecked()) {
                                                 editors.putBoolean("remember", true);
@@ -114,7 +112,7 @@ public class logon extends AppCompatActivity {
                                             editor.commit();
                                             editors.commit();
                                         }
-                                        // TODO 加载对话框
+
                                         Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(logon.this,MainActivity.class);
                                         startActivity(intent);
