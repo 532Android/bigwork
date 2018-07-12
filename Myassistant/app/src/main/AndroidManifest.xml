@@ -13,11 +13,6 @@
         <activity
             android:name=".logon"
             android:label="@string/help">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -27,7 +22,15 @@
             android:name=".sign_up"
             android:label="@string/sign">
         </activity>
-        <activity android:name=".AddEventActivity"></activity>
+        <activity
+            android:name=".AddEventActivity"
+            android:label="@string/add">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

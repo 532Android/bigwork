@@ -2,6 +2,7 @@
     <string name="app_name">Myassistant</string>
     <string name="sign">注册</string>
     <string name="help">个人助手</string>
+    <string name="add">添加行程</string>
     <string name="日程管理">日程管理</string>
     <string name="闹钟">闹钟</string>
     <string name="收支管理">收支管理</string>

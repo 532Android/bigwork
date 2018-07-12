@@ -1,7 +1,6 @@
 package com.zucc.hpy31501365gbl31501364;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,8 +19,6 @@ import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 /**
  * Created by L-Jere on 2018/7/10.
