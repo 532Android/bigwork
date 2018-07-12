@@ -33,6 +33,7 @@ public class logon extends AppCompatActivity {
     private SharedPreferences pref;
     private SharedPreferences pre;
     private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor editors;
     private final String URL = "http://10.0.2.2:3000/users/login";
 
     @Override
@@ -80,26 +81,32 @@ public class logon extends AppCompatActivity {
                                 public void run() {
                                     if (status.equals("1")) {
                                         if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
-                                            editor = pref.edit();
+                                            editors = pref.edit();
+                                            editor = pre.edit();
                                             if (Remember.isChecked()) {
-                                                editor.putBoolean("remember", true);
+                                                editors.putBoolean("remember", true);
                                             }
                                             else{
                                                 editor.clear();
+                                                editors.clear();
                                             }
                                             editor.commit();
+                                            editors.commit();
                                         }
                                         else{
-                                            editor = pref.edit();
+                                            editors = pref.edit();
+                                            editor = pre.edit();
                                             if (Remember.isChecked()) {
-                                                editor.putBoolean("remember", true);
+                                                editors.putBoolean("remember", true);
                                                 editor.putString("username",U);
                                                 editor.putString("password",P);
                                             }
                                             else{
                                                 editor.clear();
+                                                editors.clear();
                                             }
                                             editor.commit();
+                                            editors.commit();
                                         }
                                         Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(logon.this,MainActivity.class);

@@ -159,6 +159,8 @@ public class AddEventActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
                 }
                 else{
+
+
                     Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
                     startActivity(intent);
