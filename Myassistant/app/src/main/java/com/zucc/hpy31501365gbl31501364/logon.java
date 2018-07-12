@@ -87,8 +87,7 @@ public class logon extends AppCompatActivity {
                                                 editors.putBoolean("remember", true);
                                             }
                                             else{
-                                                editor.clear();
-                                                editors.clear();
+                                                editors.putBoolean("remember", false);
                                             }
                                             editor.commit();
                                             editors.commit();
@@ -102,8 +101,9 @@ public class logon extends AppCompatActivity {
                                                 editor.putString("password",P);
                                             }
                                             else{
-                                                editor.clear();
-                                                editors.clear();
+                                                editors.putBoolean("remember", false);
+                                                editor.putString("username",U);
+                                                editor.putString("password",P);
                                             }
                                             editor.commit();
                                             editors.commit();

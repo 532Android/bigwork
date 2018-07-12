@@ -19,18 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/help">
-        </activity>
-        <activity
-            android:name=".sign_up"
-            android:label="@string/sign">
-        </activity>
-        <activity
-            android:name=".AddEventActivity"
-            android:label="@string/add">
-        </activity>
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".sign_up"/>
+        <activity android:name=".AddEventActivity"/>
 
     </application>
 

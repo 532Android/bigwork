@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
@@ -32,11 +33,23 @@ public class sign_up extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
+        TextView tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText("注册");
+        Button tv_back = (Button)findViewById(R.id.tv_back);
         final EditText Name = (EditText)findViewById(R.id.name);
         final EditText Username = (EditText)findViewById(R.id.username);
         final EditText Password1 = (EditText)findViewById(R.id.password1);
         final EditText Password2 = (EditText)findViewById(R.id.password2);
         Button Sign = (Button) findViewById(R.id.sign);
+
+        tv_back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(sign_up.this, logon.class);
+                startActivity(intent);
+            }
+        });
+
         Sign.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

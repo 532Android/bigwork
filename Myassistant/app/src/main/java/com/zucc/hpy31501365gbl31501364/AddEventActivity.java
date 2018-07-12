@@ -3,6 +3,7 @@ package com.zucc.hpy31501365gbl31501364;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,15 +15,29 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class AddEventActivity extends AppCompatActivity {
 
+    private final String URL = "http://10.0.2.2:3000/richengs/addEvent";
+    private SharedPreferences pre;
     private List<String> dataList;
     private ArrayAdapter<String> adapter;
     private EditText fordata;
@@ -40,6 +55,17 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        TextView tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText("增加行程");
+        Button tv_back = (Button)findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        pre = getSharedPreferences("data", MODE_PRIVATE);
         Button add = (Button)findViewById(R.id.add);
         title = (EditText)findViewById(R.id.title);
         where = (EditText)findViewById(R.id.where);
@@ -159,11 +185,47 @@ public class AddEventActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
                 }
                 else{
-
-
-                    Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId",pre.getString("username", ""))
+                            .add("eventTitle",Title)
+                            .add("eventDate",ForData)
+                            .add("eventType",Type)
+                            .add("startTime",Time1)
+                            .add("endTime",Time2)
+                            .add("priority",Rating)
+                            .add("place",Where)
+                            .add("beizhu",Remark)
+                            .add("liuyan",Talk)
+                            .build();
+                    HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback(){
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String responseData = response.body().string();
+                            try{
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                final String status = jsonObject.getString("status");
+                                runOnUiThread(new Runnable(){
+                                    @Override
+                                    public void run() {
+                                        if (status.equals("1")) {
+                                            Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"所添加行程有误",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
         });
