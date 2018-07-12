@@ -5,10 +5,13 @@ var riChengSchema = new mongoose.Schema({
   "eventId": String,
   "eventTitle": String,
   "eventDate": String,
+  "eventType": String,
   "startTime": String,
   "endTime": String,
+  "priority": String,
   "place": String,
-  "beizhu": String
+  "beizhu": String,
+  "liuyan": String
 });
 
 module.exports = mongoose.model("Richeng", riChengSchema);
