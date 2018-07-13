@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
@@ -58,8 +59,15 @@ public class SelectEventActivity extends AppCompatActivity {
         dataList = new ArrayList<String>();
         dataList.add("日期(降序)");
         dataList.add("日期(升序)");
-        dataList.add("重要性");
-        dataList.add("类别");
+        dataList.add("重要性(0-2星)");
+        dataList.add("重要性(2-4星)");
+        dataList.add("重要性(4-6星)");
+        dataList.add("类别(工作)");
+        dataList.add("类别(家庭)");
+        dataList.add("类别(旅行)");
+        dataList.add("类别(娱乐)");
+        dataList.add("类别(纪念日)");
+        dataList.add("类别(其他)");
         adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,dataList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -69,26 +77,85 @@ public class SelectEventActivity extends AppCompatActivity {
                 type=adapter.getItem(position);
                 pre = getSharedPreferences("data", MODE_PRIVATE);
                 String userId = pre.getString("username", "");
-                if(type=="日期(降序)"){
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("userId", userId)
-                            .add("sort", String.valueOf(-1))
-                            .build();
-                    queryFromServer(URL + "searchEvent", requestBody);
-                }
-                else if(type=="日期(升序)"){
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("userId", userId)
-                            .add("sort", String.valueOf(1))
-                            .build();
-                    queryFromServer(URL + "searchEvent", requestBody);
-                }
-                else if(type=="类别"){
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("userId", userId)
-//                            .add("sort",)
-                            .build();
-                    queryFromServer(URL + "searchEvent", requestBody);
+                RequestBody requestBody;
+                switch (position){
+                    case 0:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("sort", String.valueOf(-1))
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 1:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("sort", String.valueOf(1))
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 2:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("priority", String.valueOf(1))
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 3:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("priority", String.valueOf(2))
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 4:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("priority", String.valueOf(3))
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 5:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "工作")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 6:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "家庭")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 7:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "旅行")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 8:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "娱乐")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 9:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "纪念日")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
+                    case 10:
+                        requestBody = new FormBody.Builder()
+                                .add("userId", userId)
+                                .add("eventType", "其他")
+                                .build();
+                        queryFromServer(URL + "searchEvent", requestBody);
+                        break;
                 }
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {
@@ -120,6 +187,15 @@ public class SelectEventActivity extends AppCompatActivity {
                                 mRecyclerView.setVisibility(View.VISIBLE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(SelectEventActivity.this);
                                 mRecyclerView.setLayoutManager(layoutManager);
+                            }
+                        });
+                    }
+                    else if (status.equals("2001")) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mRecyclerView.setVisibility(View.INVISIBLE);
+                                Toast.makeText(SelectEventActivity.this, "没有该类日程", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

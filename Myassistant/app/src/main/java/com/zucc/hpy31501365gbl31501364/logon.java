@@ -69,8 +69,7 @@ public class logon extends AppCompatActivity {
                 HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Utill.closeProgressDialog();
-                        Toast.makeText(logon.this, "登录失败", Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
