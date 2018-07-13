@@ -1,17 +1,24 @@
 package com.zucc.hpy31501365gbl31501364;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +59,31 @@ public class MyFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment1,container,false);
         mCanlendarView = (CalendarView) view.findViewById(R.id.calendarView);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.richeng_List);
+        FloatingActionButton addevents = (FloatingActionButton)view.findViewById(R.id.Addeventbutton);
+
+        TextView tv_title = (TextView)view.findViewById(R.id.tv_title);
+        tv_title.setText("日程管理");
+        Button tv_back = (Button)view.findViewById(R.id.tv_back);
+        tv_back.setBackgroundColor(Color.parseColor("#00b7c4c4"));
+        tv_back.setText("注销");
+        Button tv_edit = (Button)view.findViewById(R.id.tv_edit);
+        tv_edit.setText("查询");
+
+        tv_back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), logon.class);
+                startActivity(intent);
+            }
+        });
+
+        tv_edit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
 
         mCanlendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -65,6 +97,13 @@ public class MyFragment extends Fragment {
                         .add("eventDate", time)
                         .build();
                 queryFromServer(URL + "searchEvent", requestBody);
+            }
+        });
+        addevents.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(getActivity(), AddEventActivity.class);
+                startActivity(intent);
             }
         });
         return view;

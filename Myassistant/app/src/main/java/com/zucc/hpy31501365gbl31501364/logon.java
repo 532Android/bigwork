@@ -82,7 +82,6 @@ public class logon extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Utill.showProgressDialog(logon.this,"请稍后");
                                     if (status.equals("1")) {
                                         if(U.equals(pre.getString("username", ""))&&P.equals(pre.getString("password", ""))){
                                             editors = pref.edit();

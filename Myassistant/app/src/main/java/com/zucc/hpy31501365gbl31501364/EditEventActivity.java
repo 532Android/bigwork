@@ -58,6 +58,7 @@ public class EditEventActivity extends AppCompatActivity {
     private String type;
     private Float rating1=1f;
     private RatingBar ratingBar;
+    private Spinner spinner;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,6 @@ public class EditEventActivity extends AppCompatActivity {
             }
         });
         pre = getSharedPreferences("data", MODE_PRIVATE);
-        ratingBar= (RatingBar) findViewById(R.id.rating);
         title = (EditText)findViewById(R.id.title);
         where = (EditText)findViewById(R.id.where);
         remark = (EditText)findViewById(R.id.remark);
@@ -85,10 +85,11 @@ public class EditEventActivity extends AppCompatActivity {
         fordata.setInputType(InputType.TYPE_NULL);
         time1.setInputType(InputType.TYPE_NULL);
         time2.setInputType(InputType.TYPE_NULL);
-        Spinner spinner = (Spinner)findViewById(R.id.type);
+        ratingBar= (RatingBar) findViewById(R.id.rating);
+        spinner = (Spinner)findViewById(R.id.type);
 
         Intent intent = getIntent();
-        String EvenId = intent.getStringExtra("EvenId");
+        final String EvenId = intent.getStringExtra("EvenId");
         String userId = pre.getString("username", "");
         RequestBody requestBody = new FormBody.Builder()
                 .add("userId", userId)
@@ -169,14 +170,122 @@ public class EditEventActivity extends AppCompatActivity {
         });
 
         Button tv_edit = (Button)findViewById(R.id.tv_edit);
+        tv_edit.setText("提交");
         tv_edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-
-
+                String Title = title.getText().toString();
+                String Type = type.toString();
+                String Rating = rating1.toString();
+                String ForData = fordata.getText().toString().trim();
+                String Time1 = time1.getText().toString().trim();
+                String Time2 = time2.getText().toString().trim();
+                String Where = where.getText().toString();
+                String Remark = remark.getText().toString();
+                String Talk = talk.getText().toString();
+                if(Title.length()==0){
+                    Toast.makeText(getApplicationContext(),"标题不能为空",Toast.LENGTH_SHORT).show();
+                }
+                else if(Rating.length()==0){
+                    Toast.makeText(getApplicationContext(),"请选择重要性",Toast.LENGTH_SHORT).show();
+                }
+                else if(ForData.length()==0){
+                    Toast.makeText(getApplicationContext(),"请选择日期",Toast.LENGTH_SHORT).show();
+                }
+                else if(Time1.length()==0){
+                    Toast.makeText(getApplicationContext(),"请选择开始时间",Toast.LENGTH_SHORT).show();
+                }
+                else if(Time2.length()==0){
+                    Toast.makeText(getApplicationContext(),"请选择结束时间",Toast.LENGTH_SHORT).show();
+                }
+                else if(Time1.compareTo(Time2)>=0){
+                    Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("eventId",EvenId)
+                            .add("eventTitle",Title)
+                            .add("eventDate",ForData)
+                            .add("eventType",Type)
+                            .add("startTime",Time1)
+                            .add("endTime",Time2)
+                            .add("priority",Rating)
+                            .add("place",Where)
+                            .add("beizhu",Remark)
+                            .add("liuyan",Talk)
+                            .build();
+                    HttpUtil.postOkHttpRequest(URL + "editEvent", requestBody, new okhttp3.Callback(){
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String responseData = response.body().string();
+                            try{
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                final String status = jsonObject.getString("status");
+                                runOnUiThread(new Runnable(){
+                                    @Override
+                                    public void run() {
+                                        if (status.equals("1")) {
+                                            Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(EditEventActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"所添加行程有误",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
             }
         });
+
+        Button delete = (Button)findViewById(R.id.delete);
+        delete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("eventId",EvenId)
+                        .build();
+                HttpUtil.postOkHttpRequest(URL + "deleteEvent", requestBody, new okhttp3.Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String responseData = response.body().string();
+                        try{
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            final String status = jsonObject.getString("status");
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run() {
+                                    if (status.equals("1")) {
+                                        Toast.makeText(getApplicationContext(),"删除成功",Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(EditEventActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(),"删除过程有误",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
     }
     private void showDatePickerDialog(){
         Calendar c = Calendar.getInstance();
@@ -221,9 +330,9 @@ public class EditEventActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(responseData);
                     final String status = jsonObject.getString("status");
                     if (status.equals("1")) {
-                        final List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
+                            List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
                             title.setText(result.get(0).getEventTitle());
-
+                            spinner.setSelection(checkChoosed(result.get(0).getEventType()));
                             fordata.setText(result.get(0).getEventDate());
                             time1.setText(result.get(0).getStartTime());
                             time2.setText(result.get(0).getEndTime());
@@ -244,6 +353,30 @@ public class EditEventActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private int checkChoosed (String choosed) {
+        int result;
+        switch (choosed) {
+            case "工作":
+                result = 0;
+                break;
+            case "家庭":
+                result = 1;
+                break;
+            case "旅行":
+                result = 2;
+                break;
+            case "娱乐":
+                result = 3;
+                break;
+            case "纪念日":
+                result = 4;
+                break;
+            default:
+                result = 5;
+                break;
+        }
+        return result;
     }
 
 }

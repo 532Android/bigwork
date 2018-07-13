@@ -57,7 +57,7 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 RichengResult richeng = mRichengList.get(position);
-                Toast.makeText(v.getContext(), "position: " + position + "  and  eventId: " + richeng.getEventId(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(v.getContext(), "position: " + position + "  and  eventId: " + richeng.getEventId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(v.getContext(), EditEventActivity.class);
                 intent.putExtra("EvenId",richeng.getEventId());
                 v.getContext().startActivity(intent);

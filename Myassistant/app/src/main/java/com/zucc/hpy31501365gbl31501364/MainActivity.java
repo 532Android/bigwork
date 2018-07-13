@@ -26,22 +26,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView tv_title = (TextView)findViewById(R.id.tv_title);
-        tv_title.setText("个人助手");
-        Button tv_back = (Button)findViewById(R.id.tv_back);
-        tv_back.setVisibility(View.GONE);
-        Button tv_edit = (Button)findViewById(R.id.tv_edit);
-        tv_edit.setText("注销");
         mViewPager=(ViewPager) findViewById(R.id.mViewPager);
         bottomNavigationView=(BottomNavigationView) findViewById(R.id.mBottom);
-
-        tv_edit.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, logon.class);
-                startActivity(intent);
-            }
-        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
             @Override

@@ -10,7 +10,9 @@
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:background="@android:drawable/ic_menu_revert" />
+        android:background="@android:drawable/ic_menu_revert"
+        android:textColor="@android:color/background_light"
+        />
 
     <TextView
         android:id="@+id/tv_title"
