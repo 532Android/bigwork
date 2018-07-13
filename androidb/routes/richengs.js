@@ -66,10 +66,10 @@ router.post('/addEvent', function (req, res, next) {
 router.post('/searchEvent', function (req, res, next) {
   var userId = req.body.userId || "";
   var sort = req.body.sort || -1;
+  var eventId = req.body.eventId;
   var eventDate = req.body.eventDate;
   var eventType = req.body.eventType;
   var priority = req.body.priority;
-  var eventId = req.body.eventId;
   var findEvent = {
     userId: userId,
     eventId: eventId,
@@ -85,8 +85,10 @@ router.post('/searchEvent', function (req, res, next) {
       }
     }
   }
-  var rModel =  Richeng.find(findEvent).sort({eventDate: sort})
-  rModel.exec( function (err, doc) {
+  var rModel = Richeng.find(findEvent).sort({
+    eventDate: sort
+  })
+  rModel.exec(function (err, doc) {
     if (err) {
       res.json({
         status: '0',
@@ -145,7 +147,7 @@ router.post('/editEvent', function (req, res, next) {
   var liuyan = req.body.liuyan;
   Richeng.update({
     eventId: eventId
-  },{
+  }, {
     eventTitle: eventTitle,
     eventDate: eventDate,
     eventType: eventType,
@@ -173,6 +175,56 @@ router.post('/editEvent', function (req, res, next) {
           status: '2002',
           msg: '',
           result: 'edit failed'
+        })
+      }
+    }
+  })
+});
+
+// 查询日程接口(只返回时间、用于表示日历上的日期)
+router.get('/findAllEvent', function (req, res, next) {
+  var userId = req.query.userId;
+  Richeng.find({
+    userId: userId
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc) {
+        var returnTime = [];
+        doc.forEach(function (item) {
+          returnTime.push(item.eventDate);
+        });
+        // Set对象解构赋值到数组
+        var newArr = [...new Set(returnTime)];
+        var arr = new Array(newArr.length);
+        // 将新数组的每个元素初值设为0
+        for (let k = 0; k < arr.length; k++) {
+          arr[k] = 0;
+        }
+        for (let i = 0; i < newArr.length; i++) {
+          for (let j = 0; j < returnTime.length; j++) {
+            if (newArr[i] == returnTime[j]) {
+              arr[i]++;
+            }
+          }
+        }
+        console.log(newArr);
+        console.log(arr);
+        res.json({
+          status: '1',
+          msg: '',
+          result: newArr,
+          count: arr
+        })
+      } else {
+        res.json({
+          status: '2003',
+          msg: '',
+          result: 'This user has no events!'
         })
       }
     }
