@@ -67,18 +67,35 @@ public class SelectEventActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 type=adapter.getItem(position);
+                pre = getSharedPreferences("data", MODE_PRIVATE);
+                String userId = pre.getString("username", "");
+                if(type=="日期(降序)"){
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId", userId)
+                            .add("sort", String.valueOf(-1))
+                            .build();
+                    queryFromServer(URL + "searchEvent", requestBody);
+                }
+                else if(type=="日期(升序)"){
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId", userId)
+                            .add("sort", String.valueOf(1))
+                            .build();
+                    queryFromServer(URL + "searchEvent", requestBody);
+                }
+                else if(type=="类别"){
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId", userId)
+//                            .add("sort",)
+                            .build();
+                    queryFromServer(URL + "searchEvent", requestBody);
+                }
             }
             @Override public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
-        pre = getSharedPreferences("data", MODE_PRIVATE);
-        String userId = pre.getString("username", "");
-        RequestBody requestBody = new FormBody.Builder()
-                .add("userId", userId)
-                .add("sort", String.valueOf(1))
-                .build();
-        queryFromServer(URL + "searchEvent", requestBody);
+
     }
     private void queryFromServer(String address, RequestBody requestBody) {
         HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {

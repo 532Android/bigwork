@@ -164,8 +164,42 @@ public class AddEventActivity extends AppCompatActivity {
                 String Type = type.toString();
                 String Rating = rating1.toString();
                 String ForData = fordata.getText().toString().trim();
+                String nian = ForData.substring(0,4);
+                int k = ForData.indexOf("月",5);
+                int j = ForData.indexOf("日",k+1);
+                String yue = ForData.substring(5,k);
+                String ri = ForData.substring(k+1,j);
+                if(yue.length()==1){
+                    yue="0"+yue;
+                }
+                if(ri.length()==1){
+                    ri="0"+ri;
+                }
+                String date = nian + "年" + yue + "月" + ri + "日";
                 String Time1 = time1.getText().toString().trim();
+                int l = Time1.indexOf("时",0);
+                int m = Time1.indexOf("分",l+1);
+                String shi = Time1.substring(0,l);
+                String feng = ForData.substring(l+1,m);
+                if(shi.length()==1){
+                    shi="0"+shi;
+                }
+                if(feng.length()==1){
+                    feng="0"+feng;
+                }
+                String ttime = shi + "时" + feng + "分";
                 String Time2 = time2.getText().toString().trim();
+                int l2 = Time2.indexOf("时",0);
+                int m2 = Time2.indexOf("分",l+1);
+                String sshi = Time2.substring(0,l);
+                String ffeng = ForData.substring(l+1,m);
+                if(shi.length()==1){
+                    sshi="0"+sshi;
+                }
+                if(feng.length()==1){
+                    ffeng="0"+ffeng;
+                }
+                String tttime = sshi + "时" + ffeng + "分";
                 String Where = where.getText().toString();
                 String Remark = remark.getText().toString();
                 String Talk = talk.getText().toString();
@@ -191,10 +225,10 @@ public class AddEventActivity extends AppCompatActivity {
                     RequestBody requestBody = new FormBody.Builder()
                             .add("userId",pre.getString("username", ""))
                             .add("eventTitle",Title)
-                            .add("eventDate",ForData)
+                            .add("eventDate",date)
                             .add("eventType",Type)
-                            .add("startTime",Time1)
-                            .add("endTime",Time2)
+                            .add("startTime",ttime)
+                            .add("endTime",tttime)
                             .add("priority",Rating)
                             .add("place",Where)
                             .add("beizhu",Remark)

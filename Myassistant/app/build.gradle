@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.google.code.gson:gson:2.7'
     testCompile 'junit:junit:4.12'
+    compile 'com.haibin:calendarview:3.0.6'
 }
