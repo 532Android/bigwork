@@ -18,12 +18,15 @@ import java.util.List;
  * Created by Administrator on 2018/7/12 0012.
  */
 
-public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.ViewHolder>{
+public class SelectEventActivityAdapter extends RecyclerView.Adapter <SelectEventActivityAdapter.ViewHolder>{
     private List<RichengResult> mRichengList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
         TextView eventTitle;
+        TextView type;
+        TextView Priority;
+        TextView fordata;
         TextView startTime;
         TextView endTime;
         TextView place;
@@ -33,6 +36,9 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
             super(view);
             eventView = view;
             eventTitle = (TextView) view.findViewById(R.id.eventTitle);
+            type = (TextView) view.findViewById(R.id.type);
+            Priority = (TextView) view.findViewById(R.id.Priority);
+            fordata = (TextView) view.findViewById(R.id.data);
             startTime = (TextView) view.findViewById(R.id.startTime);
             endTime = (TextView) view.findViewById(R.id.endTime);
             place = (TextView) view.findViewById(R.id.place);
@@ -40,21 +46,20 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
         }
     }
 
-    public MyFragmentAdapter(List<RichengResult> richengList) {
+    public SelectEventActivityAdapter(List<RichengResult> richengList) {
         mRichengList = richengList;
         Log.d("Adapter", "mRichengList:" + mRichengList.toString());
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment1_richenglist_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_select_event_adapter, parent, false);
         final ViewHolder holder = new ViewHolder(view);
         holder.eventView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 RichengResult richeng = mRichengList.get(position);
-//                Toast.makeText(v.getContext(), "position: " + position + "  and  eventId: " + richeng.getEventId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(v.getContext(), EditEventActivity.class);
                 intent.putExtra("EvenId",richeng.getEventId());
                 v.getContext().startActivity(intent);
@@ -68,6 +73,9 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
 
         RichengResult richeng = mRichengList.get(position);
         holder.eventTitle.setText(richeng.getEventTitle());
+        holder.type.setText(richeng.getEventType());
+        holder.Priority.setText(richeng.getPriority());
+        holder.fordata.setText(richeng.getEventDate());
         holder.startTime.setText(richeng.getStartTime());
         holder.endTime.setText(richeng.getEndTime());
         holder.place.setText(richeng.getPlace());

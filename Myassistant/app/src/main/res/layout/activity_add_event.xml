@@ -66,9 +66,8 @@
                     android:id="@+id/type"
                     android:layout_width="330dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
-                    />
+                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout
