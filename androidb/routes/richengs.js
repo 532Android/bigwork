@@ -85,6 +85,30 @@ router.post('/searchEvent', function (req, res, next) {
       }
     }
   }
+  
+  if (findEvent.priority != undefined) {
+    var pGt = '';
+    var pLte = '';
+    switch (findEvent.priority) {
+      case '1':
+        pGt = '0';
+        pLte = '2';
+        break;
+      case '2':
+        pGt = '2';
+        pLte = '4';
+        break;
+      case '3':
+        pGt = '4';
+        pLte = '6';
+        break;
+    }
+    findEvent.priority = {
+      $gt: pGt,
+      $lte: pLte
+    }
+  }
+
   var rModel = Richeng.find(findEvent).sort({
     eventDate: sort
   })
