@@ -22,6 +22,7 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".sign_up"/>
         <activity android:name=".AddEventActivity"/>
+        <activity android:name=".EditEventActivity"/>
 
     </application>
 

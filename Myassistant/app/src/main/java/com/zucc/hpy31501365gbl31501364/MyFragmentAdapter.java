@@ -1,5 +1,7 @@
 package com.zucc.hpy31501365gbl31501364;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.Richeng;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Administrator on 2018/7/12 0012.
@@ -54,6 +58,9 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
                 int position = holder.getAdapterPosition();
                 RichengResult richeng = mRichengList.get(position);
                 Toast.makeText(v.getContext(), "position: " + position + "  and  eventId: " + richeng.getEventId(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(v.getContext(), EditEventActivity.class);
+                intent.putExtra("EvenId",richeng.getEventId());
+                v.getContext().startActivity(intent);
             }
         });
         return holder;
@@ -61,6 +68,7 @@ public class MyFragmentAdapter extends RecyclerView.Adapter <MyFragmentAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
         RichengResult richeng = mRichengList.get(position);
         holder.eventTitle.setText(richeng.getEventTitle());
         holder.startTime.setText(richeng.getStartTime());

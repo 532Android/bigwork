@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.MissingFormatArgumentException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             } };
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
-
     }
 }
 

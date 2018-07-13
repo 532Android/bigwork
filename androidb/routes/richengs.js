@@ -69,8 +69,10 @@ router.post('/searchEvent', function (req, res, next) {
   var eventDate = req.body.eventDate;
   var eventType = req.body.eventType;
   var priority = req.body.priority;
+  var eventId = req.body.eventId;
   var findEvent = {
     userId: userId,
+    eventId: eventId,
     eventDate: eventDate,
     eventType: eventType,
     priority: priority,

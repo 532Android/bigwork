@@ -4,9 +4,11 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,7 +21,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
+import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,9 +38,13 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class AddEventActivity extends AppCompatActivity {
+/**
+ * Created by L-Jere on 2018/7/13.
+ */
 
-    private final String URL = "http://10.0.2.2:3000/richengs/addEvent";
+public class EditEventActivity extends AppCompatActivity {
+
+    private final String URL = "http://10.0.2.2:3000/richengs/";
     private SharedPreferences pre;
     private List<String> dataList;
     private ArrayAdapter<String> adapter;
@@ -49,24 +57,24 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText talk;
     private String type;
     private Float rating1=1f;
+    private RatingBar ratingBar;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_edit_event);
 
         TextView tv_title = (TextView)findViewById(R.id.tv_title);
-        tv_title.setText("增加日程");
+        tv_title.setText("编辑日程");
         Button tv_back = (Button)findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
+                Intent intent = new Intent(EditEventActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
         pre = getSharedPreferences("data", MODE_PRIVATE);
-        Button add = (Button)findViewById(R.id.add);
+        ratingBar= (RatingBar) findViewById(R.id.rating);
         title = (EditText)findViewById(R.id.title);
         where = (EditText)findViewById(R.id.where);
         remark = (EditText)findViewById(R.id.remark);
@@ -77,8 +85,17 @@ public class AddEventActivity extends AppCompatActivity {
         fordata.setInputType(InputType.TYPE_NULL);
         time1.setInputType(InputType.TYPE_NULL);
         time2.setInputType(InputType.TYPE_NULL);
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.rating);
         Spinner spinner = (Spinner)findViewById(R.id.type);
+
+        Intent intent = getIntent();
+        String EvenId = intent.getStringExtra("EvenId");
+        String userId = pre.getString("username", "");
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId", userId)
+                .add("eventId", EvenId)
+                .build();
+        queryFromServer(URL + "searchEvent", requestBody);
+
         dataList = new ArrayList<String>();
         dataList.add("工作");
         dataList.add("家庭");
@@ -99,12 +116,6 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                    rating1 = rating;
-            }
-        });
 
         fordata.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
@@ -157,87 +168,19 @@ public class AddEventActivity extends AppCompatActivity {
             }
         });
 
-        add.setOnClickListener(new View.OnClickListener(){
+        Button tv_edit = (Button)findViewById(R.id.tv_edit);
+        tv_edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String Title = title.getText().toString();
-                String Type = type.toString();
-                String Rating = rating1.toString();
-                String ForData = fordata.getText().toString().trim();
-                String Time1 = time1.getText().toString().trim();
-                String Time2 = time2.getText().toString().trim();
-                String Where = where.getText().toString();
-                String Remark = remark.getText().toString();
-                String Talk = talk.getText().toString();
-                if(Title.length()==0){
-                    Toast.makeText(getApplicationContext(),"标题不能为空",Toast.LENGTH_SHORT).show();
-                }
-                else if(Rating.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择重要性",Toast.LENGTH_SHORT).show();
-                }
-                else if(ForData.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择日期",Toast.LENGTH_SHORT).show();
-                }
-                else if(Time1.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择开始时间",Toast.LENGTH_SHORT).show();
-                }
-                else if(Time2.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择结束时间",Toast.LENGTH_SHORT).show();
-                }
-                else if(Time1.compareTo(Time2)>=0){
-                    Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    RequestBody requestBody = new FormBody.Builder()
-                            .add("userId",pre.getString("username", ""))
-                            .add("eventTitle",Title)
-                            .add("eventDate",ForData)
-                            .add("eventType",Type)
-                            .add("startTime",Time1)
-                            .add("endTime",Time2)
-                            .add("priority",Rating)
-                            .add("place",Where)
-                            .add("beizhu",Remark)
-                            .add("liuyan",Talk)
-                            .build();
-                    HttpUtil.postOkHttpRequest(URL, requestBody, new okhttp3.Callback(){
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-                        }
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String responseData = response.body().string();
-                            try{
-                                JSONObject jsonObject = new JSONObject(responseData);
-                                final String status = jsonObject.getString("status");
-                                runOnUiThread(new Runnable(){
-                                    @Override
-                                    public void run() {
-                                        if (status.equals("1")) {
-                                            Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                        else{
-                                            Toast.makeText(getApplicationContext(),"所添加行程有误",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }
-                            catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                }
+
+
+
             }
         });
-
     }
-
     private void showDatePickerDialog(){
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(AddEventActivity.this, new DatePickerDialog.OnDateSetListener(){
+        new DatePickerDialog(EditEventActivity.this, new DatePickerDialog.OnDateSetListener(){
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 fordata.setText(year+"年"+(monthOfYear+1)+"月"+dayOfMonth+"日");
@@ -247,7 +190,7 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void showTimePickerDialog1(){
         Calendar c = Calendar.getInstance();
-        new TimePickerDialog(AddEventActivity.this, new TimePickerDialog.OnTimeSetListener(){
+        new TimePickerDialog(EditEventActivity.this, new TimePickerDialog.OnTimeSetListener(){
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
                 time1.setText(hour+"时"+minute+"分");
@@ -257,12 +200,50 @@ public class AddEventActivity extends AppCompatActivity {
 
     private void showTimePickerDialog2(){
         Calendar c = Calendar.getInstance();
-        new TimePickerDialog(AddEventActivity.this, new TimePickerDialog.OnTimeSetListener(){
+        new TimePickerDialog(EditEventActivity.this, new TimePickerDialog.OnTimeSetListener(){
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
                 time2.setText(hour+"时"+minute+"分");
             }
         },c.get(Calendar.HOUR), c.get(Calendar.MINUTE),true).show();
+    }
+    private void queryFromServer(String address, RequestBody requestBody) {
+        HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    final String status = jsonObject.getString("status");
+                    if (status.equals("1")) {
+                        final List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
+                            title.setText(result.get(0).getEventTitle());
+
+                            fordata.setText(result.get(0).getEventDate());
+                            time1.setText(result.get(0).getStartTime());
+                            time2.setText(result.get(0).getEndTime());
+                            ratingBar.setRating(Float.parseFloat(result.get(0).getPriority()));
+                            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                @Override
+                                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                    rating1 = rating;
+                                }
+                            });
+                            where.setText(result.get(0).getPlace());
+                            remark.setText(result.get(0).getBeizhu());
+                            talk.setText(result.get(0).getLiuyan());
+                        }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
 }

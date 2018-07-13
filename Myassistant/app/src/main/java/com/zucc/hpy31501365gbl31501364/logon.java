@@ -114,6 +114,7 @@ public class logon extends AppCompatActivity {
                                         }
 
                                         Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
+                                        Utill.closeProgressDialog();
                                         Intent intent = new Intent(logon.this,MainActivity.class);
                                         startActivity(intent);
                                         finish();
