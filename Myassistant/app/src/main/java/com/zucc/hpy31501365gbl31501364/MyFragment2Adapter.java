@@ -1,5 +1,7 @@
 package com.zucc.hpy31501365gbl31501364;
 
+import android.app.AlarmManager;
+import android.app.Service;
 import android.content.Intent;
 
 import android.graphics.Color;
@@ -31,6 +33,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         TextView startTime;
         TextView eventId;
         Switch mswitch;
+        AlarmManager aManager;
 
         public ViewHolder (View view) {
             super(view);
@@ -40,6 +43,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             eventdate = (TextView) view.findViewById(R.id.eventdata);
             eventId = (TextView) view.findViewById(R.id.eventid);
             mswitch = (Switch) view.findViewById(R.id.starttime);
+//            aManager = (AlarmManager) getSystemService(Service.ALARM_SERVICE);
         }
     }
 
