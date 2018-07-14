@@ -349,6 +349,7 @@ router.get('/findAllClock', function (req, res, next) {
           item.clockList.forEach((clockItem) => {
             let temp = {
               eventId: item.eventId,
+              eventTitle: item.eventTitle,
               eventDate: item.eventDate,
               startTime: item.startTime,
               clockId: clockItem.clockId,

@@ -19,6 +19,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -56,11 +57,6 @@ public class MyFragment2 extends Fragment {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
         pre = getActivity().getSharedPreferences("data", MODE_PRIVATE);
         String userId = pre.getString("username", "");
-        RequestBody requestBody = new FormBody.Builder()
-                .add("userId", userId)
-                .build();
-        queryFromServer(URL + "searchEvent", requestBody);
-
         TextView tv_title = (TextView)view.findViewById(R.id.tv_title);
         tv_title.setText("闹钟");
         Button tv_back = (Button)view.findViewById(R.id.tv_back);
@@ -82,15 +78,15 @@ public class MyFragment2 extends Fragment {
                 startActivity(intent);
             }
         });
+        getFromServer(URL + "findAllClock?userId=" + userId);
         return view;
     }
 
-    private void queryFromServer(String address, RequestBody requestBody) {
-        HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
+    private void getFromServer(String address) {
+        HttpUtil.getOkHttpRequest(address, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getActivity(), "请求出问题了！", Toast.LENGTH_SHORT).show();
-                Log.e("queryFrom", e.toString());
+                Log.e("Fragment2getFrom", e.toString());
             }
 
             @Override
@@ -99,29 +95,23 @@ public class MyFragment2 extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(responseData);
                     final String status = jsonObject.getString("status");
-                    Log.d("MyFragment2", status);
                     if (status.equals("1")) {
-                        final List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
-                        for (RichengResult key : result) {
-                            Log.d("MyFragment", key.getEventTitle());
-                        }
+                        final List<ClockResult> result = JsonUtil.HandleClcokResponse(responseData);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 MyFragment2Adapter adapter = new MyFragment2Adapter(result);
                                 mRecyclerView.setAdapter(adapter);
-                                mRecyclerView.setVisibility(View.VISIBLE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                                 mRecyclerView.setLayoutManager(layoutManager);
 
                             }
                         });
-                    } else if (status.equals("2001")) {
+                    } else if (status.equals("3002")) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                mRecyclerView.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getActivity(), "还没有日程计划哦！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "你还没有设置闹钟哦！", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -131,7 +121,6 @@ public class MyFragment2 extends Fragment {
             }
         });
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

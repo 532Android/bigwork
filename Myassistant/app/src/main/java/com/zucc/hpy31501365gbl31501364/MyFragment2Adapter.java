@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 
 public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter.ViewHolder>{
-    private List<RichengResult> mlockList;
+    private List<ClockResult> mClockList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
@@ -39,7 +40,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             super(view);
             eventView = view;
             eventTitle = (TextView) view.findViewById(R.id.title);
-            startTime = (TextView) view.findViewById(R.id.starttime);
+            startTime = (TextView) view.findViewById(R.id.start);
             eventdate = (TextView) view.findViewById(R.id.eventdata);
             eventId = (TextView) view.findViewById(R.id.eventid);
             mswitch = (Switch) view.findViewById(R.id.starttime);
@@ -47,9 +48,8 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         }
     }
 
-    public MyFragment2Adapter(List<RichengResult> lockList) {
-        mlockList = lockList;
-        Log.d("Adapter", "mRichengList:" + mlockList.toString());
+    public MyFragment2Adapter(List<ClockResult> clockList) {
+        mClockList = clockList;
     }
 
     @Override
@@ -60,9 +60,10 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                RichengResult lock = mlockList.get(position);
+                ClockResult clock = mClockList.get(position);
                 Intent intent = new Intent(v.getContext(), EditClockActivity.class);
-                intent.putExtra("EvenId",lock.getEventId());
+                intent.putExtra("EvenId",clock.getEventId());
+                intent.putExtra("ClockId", clock.getClockId());
                 v.getContext().startActivity(intent);
             }
         });
@@ -72,11 +73,11 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        RichengResult lock = mlockList.get(position);
-        holder.eventdate.setText(lock.getEventDate());
-        holder.eventTitle.setText(lock.getEventTitle());
-        holder.startTime.setText(lock.getStartTime());
-        holder.eventId.setText(lock.getEventId());
+        ClockResult clock = mClockList.get(position);
+        holder.eventdate.setText(clock.getEventDate());
+        holder.eventTitle.setText(clock.getEventTitle());
+        holder.startTime.setText(clock.getStartTime());
+        holder.eventId.setText(clock.getEventId());
         holder.mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -95,6 +96,6 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
 
     @Override
     public int getItemCount() {
-        return mlockList.size();
+        return mClockList.size();
     }
 }
