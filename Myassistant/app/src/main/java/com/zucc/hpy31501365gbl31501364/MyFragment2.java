@@ -66,7 +66,6 @@ public class MyFragment2 extends Fragment {
         Button tv_back = (Button)view.findViewById(R.id.tv_back);
         tv_back.setBackgroundColor(Color.parseColor("#00b7c4c4"));
         tv_back.setText("注销");
-
         tv_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -76,10 +75,11 @@ public class MyFragment2 extends Fragment {
         });
         Button tv_edit = (Button)view.findViewById(R.id.tv_edit);
         tv_edit.setText("添加");
-        tv_back.setOnClickListener(new View.OnClickListener(){
+        tv_edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), AddClockActivity.class);
+                startActivity(intent);
             }
         });
         return view;

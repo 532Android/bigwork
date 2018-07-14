@@ -23,7 +23,7 @@
         <activity android:name=".EditEventActivity" />
         <activity android:name=".SelectEventActivity" />
         <activity android:name=".EditClockActivity" />
-        <activity android:name=".AddClockActivity"></activity>
+        <activity android:name=".AddClockActivity" />
     </application>
 
 </manifest>

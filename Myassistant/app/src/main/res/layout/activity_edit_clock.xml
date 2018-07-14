@@ -9,6 +9,13 @@
 
     <include layout="@layout/title_bar"></include>
 
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
+
     <LinearLayout
         android:layout_width="388dp"
         android:layout_height="match_parent"
@@ -86,7 +93,7 @@
                     android:text="设置提醒日期:"
                     android:textSize="18sp" />
 
-                <TextView
+                <EditText
                     android:id="@+id/settingdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -111,7 +118,7 @@
                     android:text="设置提醒时间:"
                     android:textSize="18sp" />
 
-                <TextView
+                <EditText
                     android:id="@+id/settingtime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
