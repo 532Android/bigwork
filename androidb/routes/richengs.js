@@ -459,4 +459,50 @@ router.post('/deleteClock', function (req, res, next) {
   });
 });
 
+// 查询具体闹钟接口
+router.post('/searchClock', function (req, res, next) {
+  var userId = req.body.userId;
+  var eventId = req.body.eventId;
+  var clockId = req.body.clockId;
+
+  Richeng.findOne({
+    userId: userId,
+    eventId: eventId,
+    clockList: {
+      "$elemMatch": {
+        clockId: clockId
+      }
+    }
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.length != 0) {
+        var returnResult = {
+          eventId: doc.eventId,
+          eventTitle: doc.eventTitle,
+          clockId: doc.clockList[0].clockId,
+          alertDate: doc.clockList[0].alertDate,
+          alertTime: doc.clockList[0].alertTime,
+          choosedSong: doc.clockList[0].choosedSong
+        };
+        res.json({
+          status: '1',
+          msg: '',
+          result: returnResult
+        });
+      } else {
+        res.json({
+          status: '3005',
+          msg: '',
+          result: 'have no such a clock!'
+        });
+      }
+    }
+  });
+});
+
 module.exports = router;
