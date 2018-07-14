@@ -192,7 +192,7 @@ public class EditEventActivity extends AppCompatActivity {
                 int l = Time1.indexOf("时",0);
                 int m = Time1.indexOf("分",l+1);
                 String shi = Time1.substring(0,l);
-                String feng = ForData.substring(l+1,m);
+                String feng = Time1.substring(l+1,m);
                 if(shi.length()==1){
                     shi="0"+shi;
                 }
@@ -202,13 +202,13 @@ public class EditEventActivity extends AppCompatActivity {
                 String ttime = shi + "时" + feng + "分";
                 String Time2 = time2.getText().toString().trim();
                 int l2 = Time2.indexOf("时",0);
-                int m2 = Time2.indexOf("分",l+1);
-                String sshi = Time2.substring(0,l);
-                String ffeng = ForData.substring(l+1,m);
-                if(shi.length()==1){
+                int m2 = Time2.indexOf("分",l2+1);
+                String sshi = Time2.substring(0,l2);
+                String ffeng = Time2.substring(l2+1,m2);
+                if(sshi.length()==1){
                     sshi="0"+sshi;
                 }
-                if(feng.length()==1){
+                if(ffeng.length()==1){
                     ffeng="0"+ffeng;
                 }
                 String tttime = sshi + "时" + ffeng + "分";
@@ -230,7 +230,7 @@ public class EditEventActivity extends AppCompatActivity {
                 else if(Time2.length()==0){
                     Toast.makeText(getApplicationContext(),"请选择结束时间",Toast.LENGTH_SHORT).show();
                 }
-                else if(Time1.compareTo(Time2)>=0){
+                else if(ttime.compareTo(tttime)>=0){
                     Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
                 }
                 else{

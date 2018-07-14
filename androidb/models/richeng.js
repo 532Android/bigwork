@@ -11,7 +11,15 @@ var riChengSchema = new mongoose.Schema({
   "priority": String,
   "place": String,
   "beizhu": String,
-  "liuyan": String
+  "liuyan": String,
+  "clockList": [
+    {
+      "clockId": String,
+      "alertDate": String,
+      "alertTime": String,
+      "choosedSong": String
+    }
+  ]
 });
 
 module.exports = mongoose.model("Richeng", riChengSchema);
