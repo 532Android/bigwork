@@ -6,35 +6,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/eventdata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:text="TextView"
             android:textColor="#50000000"
             android:textSize="18sp" />
 
-        <Switch
-            android:id="@+id/starttime"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:text="Switch"
-            android:textColor="#50000000"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:thumb="@drawable/switch_thumb" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="14时16分开始"
+                android:textColor="#50000000"
+                android:layout_alignParentLeft="true"
+                android:textSize="24sp"
+                android:textStyle="bold"/>
+            <Switch
+                android:id="@+id/starttime"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:thumb="@drawable/switch_thumb" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_weight="1"
             android:text="TextView"
             android:textColor="#50000000"
