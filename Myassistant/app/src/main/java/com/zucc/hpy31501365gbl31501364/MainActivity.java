@@ -1,5 +1,6 @@
 package com.zucc.hpy31501365gbl31501364;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mViewPager=(ViewPager) findViewById(R.id.mViewPager);
         bottomNavigationView=(BottomNavigationView) findViewById(R.id.mBottom);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener(){
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener(){
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -67,9 +67,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return fgLists.size();
-            } };
+            }
+        };
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.setOffscreenPageLimit(2);
+        Intent intent = getIntent();
+        final String page = intent.getStringExtra("page");
+        if(page=="1"){
+            mViewPager.setCurrentItem(1);
+        }
     }
 }
 
