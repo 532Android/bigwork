@@ -27,7 +27,7 @@
 
     <Button
         android:id="@+id/tv_edit"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="#00b7c4c4"

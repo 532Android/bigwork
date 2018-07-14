@@ -81,7 +81,7 @@ public class MyFragment extends Fragment implements
         tv_back.setBackgroundColor(Color.parseColor("#00b7c4c4"));
         tv_back.setText("注销");
         Button tv_edit = (Button)view.findViewById(R.id.tv_edit);
-        tv_edit.setText("查询");
+        tv_edit.setText("全部日程");
 
         tv_back.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -112,7 +112,7 @@ public class MyFragment extends Fragment implements
         HttpUtil.getOkHttpRequest(address, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getActivity(), "请求出问题了！", Toast.LENGTH_SHORT).show();
+
                 Log.e("getFrom", e.toString());
             }
 
@@ -149,7 +149,7 @@ public class MyFragment extends Fragment implements
         HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Toast.makeText(getActivity(), "请求出问题了！", Toast.LENGTH_SHORT).show();
+
                 Log.e("queryFrom", e.toString());
             }
 

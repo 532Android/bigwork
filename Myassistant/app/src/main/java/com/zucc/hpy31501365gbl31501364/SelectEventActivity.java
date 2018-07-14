@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.sax.StartElementListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class SelectEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_event);
         mRecyclerView = (RecyclerView)findViewById(R.id.richeng_List2);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         TextView tv_title = (TextView)findViewById(R.id.tv_title);
         tv_title.setText("日程查询");
         Button tv_back = (Button)findViewById(R.id.tv_back);

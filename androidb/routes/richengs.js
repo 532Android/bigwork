@@ -16,6 +16,7 @@ router.post('/addEvent', function (req, res, next) {
   var place = req.body.place;
   var beizhu = req.body.beizhu;
   var liuyan = req.body.liuyan;
+
   // 随机生成eventId
   var platform = 'Eve';
   // 创建两个随机数
@@ -23,6 +24,11 @@ router.post('/addEvent', function (req, res, next) {
   var ran2 = Math.floor(Math.random() * 10);
   var sysDate = new Date().Format('yyyyMMddhhmmss');
   var eventId = platform + ran1 + sysDate + ran2;
+
+  // 随机生成clockId
+  var clockform = 'Clo';
+  var clockId = clockform + ran1 + sysDate + ran2;
+
   var eventDoc = {
     userId: userId,
     eventId: eventId,
@@ -34,7 +40,13 @@ router.post('/addEvent', function (req, res, next) {
     priority: priority,
     place: place,
     beizhu: beizhu,
-    liuyan: liuyan
+    liuyan: liuyan,
+    clockList: [{
+      clockId: clockId,
+      alertDate: eventDate,
+      alertTime: startTime,
+      choosedSong: "0"
+    }]
   };
   var myModel = mongoose.model('richeng', Richeng.schema);
   var event = new myModel(eventDoc);
@@ -85,7 +97,7 @@ router.post('/searchEvent', function (req, res, next) {
       }
     }
   }
-  
+
   if (findEvent.priority != undefined) {
     var pGt = '';
     var pLte = '';
@@ -148,14 +160,22 @@ router.post('/deleteEvent', function (req, res, next) {
         msg: err.message
       });
     } else {
-      res.json({
-        status: '1',
-        msg: '',
-        result: 'delete event success!'
-      });
+      if (doc.n == 1){
+        res.json({
+          status: '1',
+          msg: '',
+          result: 'delete event success!'
+        });
+      } else {
+        res.json({
+          status: '2004',
+          msg: '',
+          result: 'delete event failed!'
+        });
+      }
     }
-  })
-})
+  });
+});
 
 // 编辑日程接口
 router.post('/editEvent', function (req, res, next) {
@@ -188,7 +208,7 @@ router.post('/editEvent', function (req, res, next) {
         msg: err.message
       });
     } else {
-      if (doc) {
+      if (doc.n == 1) {
         res.json({
           status: '1',
           msg: '',
@@ -253,6 +273,190 @@ router.get('/findAllEvent', function (req, res, next) {
       }
     }
   })
+});
+
+// 添加闹钟接口
+router.post('/addClock', function (req, res, next) {
+  var userId = req.body.userId;
+  var eventId = req.body.eventId;
+  var alertDate = req.body.alertDate;
+  var alertTime = req.body.alertTime;
+  var choosedSong = req.body.choosedSong;
+
+  // 随机生成clockId
+  var platform = 'Clo';
+  // 创建两个随机数
+  var ran1 = Math.floor(Math.random() * 10);
+  var ran2 = Math.floor(Math.random() * 10);
+  var sysDate = new Date().Format('yyyyMMddhhmmss');
+  var clockId = platform + ran1 + sysDate + ran2;
+
+  var newClockList = {
+    clockId: clockId,
+    alertDate: alertDate,
+    alertTime: alertTime,
+    choosedSong: choosedSong
+  }
+
+  Richeng.update({
+    userId: userId,
+    eventId: eventId
+  }, {
+    $push: {
+      clockList: newClockList
+    }
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.n == 1) {
+        res.json({
+          status: '1',
+          msg: '',
+          result: 'Add clock success!'
+        })
+      } else {
+        res.json({
+          status: '3001',
+          msg: '',
+          result: 'Add clock failed!'
+        })
+      }
+    }
+  })
+});
+
+// 查询用户的所有闹钟接口
+router.get('/findAllClock', function (req, res, next) {
+  var userId = req.query.userId;
+  Richeng.find({
+    userId: userId
+  }).sort({
+    eventDate: -1
+  }).exec(function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.length != 0) {
+        var returnResult = [];
+        doc.forEach((item) => {
+          item.clockList.forEach((clockItem) => {
+            let temp = {
+              eventId: item.eventId,
+              eventDate: item.eventDate,
+              startTime: item.startTime,
+              clockId: clockItem.clockId,
+              alertDate: clockItem.alertDate,
+              alertTime: clockItem.alertTime,
+              choosedSong: clockItem.choosedSong
+            }
+            returnResult.push(temp);
+          })
+        })
+        res.json({
+          status: '1',
+          msg: '',
+          result: returnResult
+        })
+      } else {
+        res.json({
+          status: '3002',
+          msg: '',
+          result: 'No clock find!'
+        })
+      }
+    }
+  })
+});
+
+// 编辑闹钟接口
+router.post("/editClock", function (req, res, next) {
+  var userId = req.body.userId;
+  var eventId = req.body.eventId;
+  var clockId = req.body.clockId;
+  var alertDate = req.body.alertDate;
+  var alertTime = req.body.alertTime;
+  var choosedSong = req.body.choosedSong;
+
+  Richeng.update({
+    userId: userId,
+    eventId: eventId,
+    clockList: {
+      "$elemMatch": {
+        clockId: clockId
+      }
+    }
+  }, {
+    "clockList.$.alertDate": alertDate,
+    "clockList.$.alertTime": alertTime,
+    "clockList.$.choosedSong": choosedSong
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.n == 1) {
+        res.json({
+          status: '1',
+          msg: '',
+          result: 'edit clock success'
+        });
+      } else {
+        res.json({
+          status: '3003',
+          msg: '',
+          result: 'edit clock failed'
+        });
+      }
+    }
+  })
+});
+
+// 删除闹钟接口
+router.post('/deleteClock', function (req, res, next) {
+  var userId = req.body.userId;
+  var eventId = req.body.eventId;
+  var clockId = req.body.clockId;
+
+  Richeng.update({
+    userId: userId,
+    eventId: eventId,
+  },{
+    $pull: {
+      'clockList': {
+        clockId: clockId
+      }
+    }
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.n == 1) {
+        res.json({
+          status: '1',
+          msg: '',
+          result: 'delete clock success!'
+        });
+      } else {
+        res.json({
+          status: '3004',
+          msg: '',
+          result: 'delete clock failed!'
+        })
+      }
+    }
+  });
 });
 
 module.exports = router;
