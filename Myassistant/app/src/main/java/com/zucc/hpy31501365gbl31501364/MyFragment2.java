@@ -1,5 +1,9 @@
 package com.zucc.hpy31501365gbl31501364;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,6 +21,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
@@ -29,6 +34,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -47,6 +55,7 @@ public class MyFragment2 extends Fragment {
 
     private RecyclerView mRecyclerView;
     private SharedPreferences pre;
+    private SharedPreferences prec;
     private final String URL = "http://10.0.2.2:3000/richengs/";
 
     @Nullable
@@ -56,6 +65,8 @@ public class MyFragment2 extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.lock_list);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
         pre = getActivity().getSharedPreferences("data", MODE_PRIVATE);
+        prec = getActivity().getSharedPreferences("clock", MODE_PRIVATE);
+
         String userId = pre.getString("username", "");
         TextView tv_title = (TextView)view.findViewById(R.id.tv_title);
         tv_title.setText("闹钟");
@@ -79,6 +90,7 @@ public class MyFragment2 extends Fragment {
             }
         });
         getFromServer(URL + "findAllClock?userId=" + userId);
+
         return view;
     }
 
@@ -120,6 +132,16 @@ public class MyFragment2 extends Fragment {
                 }
             }
         });
+        String clocktime = prec.getString("clocktime", "");
+        Log.e("asdasdasd",clocktime);
+//        if(clocktime!=null&&clocktime!=""){
+            Intent intentc = new Intent("ELITOR_CLOCK");
+            intentc.putExtra("msg","你该打酱油了");
+            PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,intentc,0);
+            AlarmManager  aManager = (AlarmManager)getActivity().getSystemService(Service.ALARM_SERVICE);
+            aManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),5*1000,pi);
+//            aManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pi);
+//        }
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

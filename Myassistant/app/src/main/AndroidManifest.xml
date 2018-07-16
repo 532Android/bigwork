@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name="com.zucc.hpy31501365gbl31501364.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -24,6 +25,11 @@
         <activity android:name=".SelectEventActivity" />
         <activity android:name=".EditClockActivity" />
         <activity android:name=".AddClockActivity" />
+        <receiver android:name=".MyReceiver">
+            <intent-filter>
+                <action android:name="ELITOR_CLOCK" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

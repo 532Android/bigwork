@@ -1,12 +1,10 @@
 package com.zucc.hpy31501365gbl31501364;
 
 import android.app.AlarmManager;
-import android.app.Service;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
-import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -26,7 +25,9 @@ import java.util.List;
 
 public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter.ViewHolder>{
     private List<ClockResult> mClockList;
-
+    private SharedPreferences prec;
+    private SharedPreferences.Editor editorc;
+    private String starttime;
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
         TextView eventdate;
@@ -34,7 +35,6 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         TextView startTime;
         TextView eventId;
         Switch mswitch;
-        AlarmManager aManager;
 
         public ViewHolder (View view) {
             super(view);
@@ -44,7 +44,6 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             eventdate = (TextView) view.findViewById(R.id.eventdata);
             eventId = (TextView) view.findViewById(R.id.eventid);
             mswitch = (Switch) view.findViewById(R.id.starttime);
-//            aManager = (AlarmManager) getSystemService(Service.ALARM_SERVICE);
         }
     }
 
@@ -81,10 +80,15 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         holder.mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                starttime = holder.startTime.getText().toString();
+                prec = MyApplication.getContext().getSharedPreferences("clock", MODE_PRIVATE);
                 if (isChecked){
                     holder.eventdate.setTextColor(Color.parseColor("#99000000"));
                     holder.eventTitle.setTextColor(Color.parseColor("#99000000"));
                     holder.startTime.setTextColor(Color.parseColor("#99000000"));
+                    editorc = prec.edit();
+                    editorc.putString("clocktime",starttime);
+                    editorc.commit();
                 }else {
                     holder.eventdate.setTextColor(Color.parseColor("#50000000"));
                     holder.eventTitle.setTextColor(Color.parseColor("#50000000"));
