@@ -485,6 +485,9 @@ router.post('/searchClock', function (req, res, next) {
         var returnResult = {
           eventId: doc.eventId,
           eventTitle: doc.eventTitle,
+          eventDate: doc.eventDate,
+          startTime: doc.startTime,
+          endTime: doc.endTime,
           clockId: doc.clockList[0].clockId,
           alertDate: doc.clockList[0].alertDate,
           alertTime: doc.clockList[0].alertTime,

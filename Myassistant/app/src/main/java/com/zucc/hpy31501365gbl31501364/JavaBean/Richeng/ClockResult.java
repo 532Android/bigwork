@@ -9,10 +9,20 @@ public class ClockResult {
     private String eventDate;
     private String eventTitle;
     private String startTime;
+
+
+    private String endTime;
     private String clockId;
     private String alertDate;
     private String alertTime;
     private String choosedSong;
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
     public String getEventTitle() {
         return eventTitle;
     }

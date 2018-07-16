@@ -362,22 +362,28 @@ public class EditEventActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(responseData);
                     final String status = jsonObject.getString("status");
                     if (status.equals("1")) {
-                            List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
-                            title.setText(result.get(0).getEventTitle());
-                            spinner.setSelection(checkChoosed(result.get(0).getEventType()));
-                            fordata.setText(result.get(0).getEventDate());
-                            time1.setText(result.get(0).getStartTime());
-                            time2.setText(result.get(0).getEndTime());
-                            ratingBar.setRating(Float.parseFloat(result.get(0).getPriority()));
-                            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                            final List<RichengResult> result = JsonUtil.HandleRichengResponse(responseData);
+                            runOnUiThread(new Runnable() {
                                 @Override
-                                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                    rating1 = rating;
+                                public void run() {
+                                    title.setText(result.get(0).getEventTitle());
+                                    spinner.setSelection(checkChoosed(result.get(0).getEventType()));
+                                    fordata.setText(result.get(0).getEventDate());
+                                    time1.setText(result.get(0).getStartTime());
+                                    time2.setText(result.get(0).getEndTime());
+                                    ratingBar.setRating(Float.parseFloat(result.get(0).getPriority()));
+                                    ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                        @Override
+                                        public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                            rating1 = rating;
+                                        }
+                                    });
+                                    where.setText(result.get(0).getPlace());
+                                    remark.setText(result.get(0).getBeizhu());
+                                    talk.setText(result.get(0).getLiuyan());
                                 }
                             });
-                            where.setText(result.get(0).getPlace());
-                            remark.setText(result.get(0).getBeizhu());
-                            talk.setText(result.get(0).getLiuyan());
+
                         }
 
                 } catch (JSONException e) {
