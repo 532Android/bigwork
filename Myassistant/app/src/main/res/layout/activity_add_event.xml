@@ -10,17 +10,12 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="350dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="16dp"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:orientation="horizontal">
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,7 +34,7 @@
 
                 <EditText
                     android:id="@+id/title"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
@@ -64,7 +59,7 @@
 
                 <Spinner
                     android:id="@+id/type"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1" />
@@ -77,7 +72,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text4"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="日期："
@@ -101,7 +95,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text4"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="起始时间："
@@ -181,7 +174,7 @@
 
                 <EditText
                     android:id="@+id/where"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -205,7 +198,7 @@
 
                 <EditText
                     android:id="@+id/remark"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -229,7 +222,7 @@
 
                 <EditText
                     android:id="@+id/talk"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
@@ -245,9 +238,10 @@
 
                 <Button
                     android:id="@+id/add"
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:background="@android:color/holo_blue_light"
                     android:text="添加"

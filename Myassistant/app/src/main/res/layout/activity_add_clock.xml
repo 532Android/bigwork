@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zucc.hpy31501365gbl31501364.AddClockActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.zucc.hpy31501365gbl31501364.AddClockActivity">
+
     <include layout="@layout/title_bar"></include>
 
     <EditText
@@ -19,57 +20,63 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="80dp">
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置提醒日期:"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/adddate"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="2018nian12yue12ri"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal">
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/text4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="设置提醒时间:"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/addtime"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="12shi12fen"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置提醒日期:"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/adddate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="2018nian12yue12ri"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置提醒时间:"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/addtime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="12shi12fen"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/addclock"
