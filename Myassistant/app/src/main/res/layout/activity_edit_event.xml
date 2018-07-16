@@ -78,7 +78,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text4"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="日期："
@@ -127,7 +126,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text4"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:text="结束时间："

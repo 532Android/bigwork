@@ -2,6 +2,8 @@ package com.zucc.hpy31501365gbl31501364;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,48 +14,74 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.google.gson.Gson;
+import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
+import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
+import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class EditClockActivity extends AppCompatActivity {
 
+    private final String URL = "http://10.0.2.2:3000/richengs/";
+    private SharedPreferences pre;
     private EditText fordata;
     private EditText time;
+    private TextView eventDate;
+    private TextView startTime;
+    private TextView endTime;
+    private TextView eventTitle;
+    // TODO 添加选择音乐
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_clock);
-
-        TextView tv_title = (TextView)findViewById(R.id.tv_title);
+        eventDate = (TextView) findViewById(R.id.eventdate);
+        startTime = (TextView) findViewById(R.id.starttime);
+        endTime = (TextView) findViewById(R.id.endtime);
+        eventTitle = (TextView) findViewById(R.id.title);
+        TextView tv_title = (TextView) findViewById(R.id.tv_title);
         tv_title.setText("设置闹钟");
-        Button tv_back = (Button)findViewById(R.id.tv_back);
-        tv_back.setOnClickListener(new View.OnClickListener(){
+        Button tv_back = (Button) findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        Button tv_edit = (Button)findViewById(R.id.tv_edit);
+        Button tv_edit = (Button) findViewById(R.id.tv_edit);
         tv_edit.setText("提交");
-        tv_edit.setOnClickListener(new View.OnClickListener(){
+        tv_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //// TODO: 2018/7/14 edit
             }
         });
-        Button delete = (Button)findViewById(R.id.deleteclock);
-        delete.setOnClickListener(new View.OnClickListener(){
+        Button delete = (Button) findViewById(R.id.deleteclock);
+        delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //// TODO: 2018/7/14 delete
             }
         });
-        fordata = (EditText)findViewById(R.id.settingdate);
+        fordata = (EditText) findViewById(R.id.settingdate);
         fordata.setInputType(InputType.TYPE_NULL);
         fordata.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     showDatePickerDialog();
                 }
             }
@@ -64,12 +92,12 @@ public class EditClockActivity extends AppCompatActivity {
                 showDatePickerDialog();
             }
         });
-        time = (EditText)findViewById(R.id.settingtime);
+        time = (EditText) findViewById(R.id.settingtime);
         time.setInputType(InputType.TYPE_NULL);
         time.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     showTimePickerDialog();
                 }
             }
@@ -80,23 +108,72 @@ public class EditClockActivity extends AppCompatActivity {
                 showTimePickerDialog();
             }
         });
+        Intent intent = getIntent();
+        String eventId = intent.getStringExtra("EvenId");
+        String clockId = intent.getStringExtra("ClockId");
+        pre = getSharedPreferences("data", MODE_PRIVATE);
+        String userId = pre.getString("username", "");
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId", userId)
+                .add("eventId", eventId)
+                .add("clockId", clockId)
+                .build();
+        queryFromServer(URL + "searchClock", requestBody);
     }
-    private void showDatePickerDialog(){
+
+    private void queryFromServer(String address, RequestBody requestBody) {
+        HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    final String status = jsonObject.getString("status");
+                    if (status.equals("1")) {
+                        final String jsonData = jsonObject.getString("result");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Gson gson = new Gson();
+                                ClockResult clock = gson.fromJson(jsonData, ClockResult.class);
+                                eventDate.setText(clock.getEventDate());
+                                startTime.setText(clock.getStartTime());
+                                endTime.setText(clock.getEndTime());
+                                eventTitle.setText(clock.getEventTitle());
+                                fordata.setText(clock.getAlertDate());
+                                time.setText(clock.getAlertTime());
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+    });
+}
+
+    private void showDatePickerDialog() {
         Calendar c = Calendar.getInstance();
-        new DatePickerDialog(EditClockActivity.this, new DatePickerDialog.OnDateSetListener(){
+        new DatePickerDialog(EditClockActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                fordata.setText(year+"年"+(monthOfYear+1)+"月"+dayOfMonth+"日");
+                fordata.setText(year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日");
             }
-        },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+        }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
     }
-    private void showTimePickerDialog(){
+
+    private void showTimePickerDialog() {
         Calendar c = Calendar.getInstance();
-        new TimePickerDialog(EditClockActivity.this, new TimePickerDialog.OnTimeSetListener(){
+        new TimePickerDialog(EditClockActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hour, int minute) {
-                time.setText(hour+"时"+minute+"分");
+                time.setText(hour + "时" + minute + "分");
             }
-        },c.get(Calendar.HOUR), c.get(Calendar.MINUTE),true).show();
+        }, c.get(Calendar.HOUR), c.get(Calendar.MINUTE), true).show();
     }
 }
