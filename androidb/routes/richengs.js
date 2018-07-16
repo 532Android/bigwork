@@ -67,11 +67,11 @@ router.post('/addEvent', function (req, res, next) {
         res.json({
           status: '2000',
           msg: '',
-          result: 'Add Falied!'
+          result: 'Add event Falied!'
         });
       }
     }
-  })
+  });
 });
 
 // 查询日程接口
