@@ -265,7 +265,7 @@ public class EditEventActivity extends AppCompatActivity {
                                             startActivity(intent);
                                         }
                                         else{
-                                            Toast.makeText(getApplicationContext(),"所添加行程有误",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),"所修改行程有误",Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });

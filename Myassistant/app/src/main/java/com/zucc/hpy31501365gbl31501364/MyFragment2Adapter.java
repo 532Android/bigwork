@@ -73,9 +73,9 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         ClockResult clock = mClockList.get(position);
-        holder.eventdate.setText(clock.getEventDate());
+        holder.eventdate.setText(clock.getAlertDate());
         holder.eventTitle.setText(clock.getEventTitle());
-        holder.startTime.setText(clock.getStartTime());
+        holder.startTime.setText(clock.getAlertTime());
         holder.eventId.setText(clock.getEventId());
         holder.mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

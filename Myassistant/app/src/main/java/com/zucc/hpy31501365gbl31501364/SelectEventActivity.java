@@ -36,6 +36,8 @@ import okhttp3.Response;
 public class SelectEventActivity extends AppCompatActivity {
     private final String URL = "http://10.0.2.2:3000/richengs/";
     private SharedPreferences pre;
+    private SharedPreferences prei;
+    private SharedPreferences.Editor editor;
     private List<String> dataList;
     private ArrayAdapter<String> adapter;
     private RecyclerView mRecyclerView;
@@ -45,16 +47,32 @@ public class SelectEventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_event);
+        TextView tv_title = (TextView)findViewById(R.id.tv_title);
+        Intent intent = getIntent();
+        final Boolean isClock = intent.getBooleanExtra("isClock", false);
+        prei = getSharedPreferences("isClock", MODE_PRIVATE);
+        editor = prei.edit();
+        if(isClock){
+            tv_title.setText("选择添加闹钟的日程");
+            editor.putString("isClock", "1");
+            editor.commit();
+        } else {
+            editor.putString("isClock", "0");
+            tv_title.setText("日程查询");
+            editor.commit();
+        }
         mRecyclerView = (RecyclerView)findViewById(R.id.richeng_List2);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        TextView tv_title = (TextView)findViewById(R.id.tv_title);
-        tv_title.setText("日程查询");
         Button tv_back = (Button)findViewById(R.id.tv_back);
         tv_back.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SelectEventActivity.this, MainActivity.class);
-                startActivity(intent);
+                if(isClock){
+                    finish();
+                }else{
+                    Intent intent = new Intent(SelectEventActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         Spinner spinner = (Spinner)findViewById(R.id.spinner);

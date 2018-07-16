@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
@@ -61,21 +62,6 @@ public class EditClockActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Button tv_edit = (Button) findViewById(R.id.tv_edit);
-        tv_edit.setText("提交");
-        tv_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//// TODO: 2018/7/14 edit
-            }
-        });
-        Button delete = (Button) findViewById(R.id.deleteclock);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//// TODO: 2018/7/14 delete
-            }
-        });
         fordata = (EditText) findViewById(R.id.settingdate);
         fordata.setInputType(InputType.TYPE_NULL);
         fordata.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -109,16 +95,131 @@ public class EditClockActivity extends AppCompatActivity {
             }
         });
         Intent intent = getIntent();
-        String eventId = intent.getStringExtra("EvenId");
-        String clockId = intent.getStringExtra("ClockId");
+        final String eventId = intent.getStringExtra("EvenId");
+        final String clockId = intent.getStringExtra("ClockId");
         pre = getSharedPreferences("data", MODE_PRIVATE);
-        String userId = pre.getString("username", "");
+        final String userId = pre.getString("username", "");
         RequestBody requestBody = new FormBody.Builder()
                 .add("userId", userId)
                 .add("eventId", eventId)
                 .add("clockId", clockId)
                 .build();
         queryFromServer(URL + "searchClock", requestBody);
+
+        Button tv_edit = (Button) findViewById(R.id.tv_edit);
+        tv_edit.setText("提交");
+        tv_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String editdate = fordata.getText().toString();
+                String nian = editdate.substring(0,4);
+                int k = editdate.indexOf("月",5);
+                int j = editdate.indexOf("日",k+1);
+                String yue = editdate.substring(5,k);
+                String ri = editdate.substring(k+1,j);
+                if(yue.length()==1){
+                    yue="0"+yue;
+                }
+                if(ri.length()==1){
+                    ri="0"+ri;
+                }
+                String date = nian + "年" + yue + "月" + ri + "日";
+                String edittime = time.getText().toString();
+                int l = edittime.indexOf("时",0);
+                int m = edittime.indexOf("分",l+1);
+                String shi = edittime.substring(0,l);
+                String feng = edittime.substring(l+1,m);
+                if(shi.length()==1){
+                    shi="0"+shi;
+                }
+                if(feng.length()==1){
+                    feng="0"+feng;
+                }
+                String ttime = shi + "时" + feng + "分";
+                if(date.compareTo(eventDate.getText().toString())>0){
+                    Toast.makeText(getApplicationContext(),"提醒日期不能晚于该日程日期",Toast.LENGTH_SHORT).show();
+                }
+                else if(date.compareTo(eventDate.getText().toString())==0&&ttime.compareTo(startTime.getText().toString())>0){
+                    Toast.makeText(getApplicationContext(),"提醒事件不能晚于该日程开始时间",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    RequestBody requestBody = new FormBody.Builder()
+                            .add("userId", userId)
+                            .add("eventId", eventId)
+                            .add("clockId", clockId)
+                            .add("alertDate",date)
+                            .add("alertTime",ttime)
+                            .build();
+                    HttpUtil.postOkHttpRequest(URL + "editClock", requestBody, new okhttp3.Callback(){
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                        }
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String responseData = response.body().string();
+                            try{
+                                JSONObject jsonObject = new JSONObject(responseData);
+                                final String status = jsonObject.getString("status");
+                                runOnUiThread(new Runnable(){
+                                    @Override
+                                    public void run() {
+                                        if (status.equals("1")) {
+                                            Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"所修改闹钟有误",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }
+                            catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        Button delete = (Button) findViewById(R.id.deleteclock);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("userId", userId)
+                        .add("eventId", eventId)
+                        .add("clockId", clockId)
+                        .build();
+                HttpUtil.postOkHttpRequest(URL + "deleteClock", requestBody, new okhttp3.Callback(){
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                    }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String responseData = response.body().string();
+                        try{
+                            JSONObject jsonObject = new JSONObject(responseData);
+                            final String status = jsonObject.getString("status");
+                            runOnUiThread(new Runnable(){
+                                @Override
+                                public void run() {
+                                    if (status.equals("1")) {
+                                        Toast.makeText(getApplicationContext(),"删除成功",Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(),"所删除闹钟有误",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void queryFromServer(String address, RequestBody requestBody) {

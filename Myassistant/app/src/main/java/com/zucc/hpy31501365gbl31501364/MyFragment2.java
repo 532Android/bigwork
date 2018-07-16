@@ -85,7 +85,8 @@ public class MyFragment2 extends Fragment {
         tv_edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddClockActivity.class);
+                Intent intent = new Intent(getActivity(), SelectEventActivity.class);
+                intent.putExtra("isClock", true);
                 startActivity(intent);
             }
         });
@@ -132,19 +133,27 @@ public class MyFragment2 extends Fragment {
                 }
             }
         });
-        String clocktime = prec.getString("clocktime", "");
-        Log.e("asdasdasd",clocktime);
-//        if(clocktime!=null&&clocktime!=""){
-            Intent intentc = new Intent("ELITOR_CLOCK");
-            intentc.putExtra("msg","你该打酱油了");
-            PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,intentc,0);
-            AlarmManager  aManager = (AlarmManager)getActivity().getSystemService(Service.ALARM_SERVICE);
-            aManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),5*1000,pi);
-//            aManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pi);
-//        }
+//        String clocktime = prec.getString("clocktime", "");
+//        Log.e("asdasdasd",clocktime);
+////        if(clocktime!=null&&clocktime!=""){
+//            Intent intentc = new Intent("ELITOR_CLOCK");
+//            intentc.putExtra("msg","你该打酱油了");
+//            PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,intentc,0);
+//            AlarmManager  aManager = (AlarmManager)getActivity().getSystemService(Service.ALARM_SERVICE);
+//            aManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),5*1000,pi);
+////            aManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pi);
+////        }
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        pre = getActivity().getSharedPreferences("data", MODE_PRIVATE);
+        String userId = pre.getString("username", "");
+        getFromServer(URL + "findAllClock?userId=" + userId);
     }
 }

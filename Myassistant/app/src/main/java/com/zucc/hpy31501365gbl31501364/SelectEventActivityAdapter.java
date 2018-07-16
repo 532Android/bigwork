@@ -2,6 +2,7 @@ package com.zucc.hpy31501365gbl31501364;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * Created by Administrator on 2018/7/12 0012.
@@ -20,6 +23,8 @@ import java.util.List;
 
 public class SelectEventActivityAdapter extends RecyclerView.Adapter <SelectEventActivityAdapter.ViewHolder>{
     private List<RichengResult> mRichengList;
+    private SharedPreferences prei;
+    private String isClock;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
@@ -60,9 +65,18 @@ public class SelectEventActivityAdapter extends RecyclerView.Adapter <SelectEven
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 RichengResult richeng = mRichengList.get(position);
-                Intent intent = new Intent(v.getContext(), EditEventActivity.class);
-                intent.putExtra("EvenId",richeng.getEventId());
-                v.getContext().startActivity(intent);
+                prei = v.getContext().getSharedPreferences("isClock", MODE_PRIVATE);
+                isClock = prei.getString("isClock", "");
+                if(isClock.equals("1")){
+                    Intent intent = new Intent(v.getContext(), AddClockActivity.class);
+                    intent.putExtra("EvenId",richeng.getEventId());
+                    v.getContext().startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(v.getContext(), EditEventActivity.class);
+                    intent.putExtra("EvenId",richeng.getEventId());
+                    v.getContext().startActivity(intent);
+                }
             }
         });
         return holder;
