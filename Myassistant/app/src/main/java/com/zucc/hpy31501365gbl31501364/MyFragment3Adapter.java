@@ -66,14 +66,19 @@ public class MyFragment3Adapter  extends RecyclerView.Adapter <MyFragment3Adapte
     public void onBindViewHolder(MyFragment3Adapter.ViewHolder holder, int position) {
 
         Account account = mAccountList.get(position);
-        Log.d("MapUtil", MapUtil.typeMap.get(account.getAccountType()).toString());
 
-
-        holder.accountTitle.setText(account.getAccountTitle()); holder.img.setImageResource(MapUtil.typeMap.get(account.getAccountType()));
+        holder.img.setImageResource(MapUtil.typeMap.get(account.getAccountType()));
+        holder.accountTitle.setText(account.getAccountTitle());
         holder.year.setText(account.getYear());
         holder.month.setText(account.getMonth());
         holder.day.setText(account.getDay());
-        holder.money.setText(String.valueOf(account.getMoney()));
+        if (account.getMoneyType().equals("支出")) {
+            holder.money.setText(String.valueOf(-account.getMoney()));
+            holder.money.setTextColor(0xFFFF0000);
+        } else {
+            holder.money.setText("+" + String.valueOf(account.getMoney()));
+            holder.money.setTextColor(0xFF008000);
+        }
     }
 
     @Override

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <item
+        android:id="@+id/faboptions_add"
+        android:icon="@drawable/add"
+        android:title="Favorite" />
+
+    <item
+        android:id="@+id/faboptions_graph"
+        android:icon="@drawable/graph"
+        android:title="Message" />
+</menu>
