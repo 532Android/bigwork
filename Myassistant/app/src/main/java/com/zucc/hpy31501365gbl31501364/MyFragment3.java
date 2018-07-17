@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.joaquimley.faboptions.FabOptions;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.Account;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
@@ -41,7 +42,7 @@ public class MyFragment3 extends Fragment{
     private TextView outMoney;
     private TextView inMoney;
     private TextView restMoney;
-    private TextView tv_title;
+    private TextView account_title;
     private RecyclerView recyclerView;
     private SharedPreferences pre;
     private final String URL = "http://10.0.2.2:3000/accounts/";
@@ -52,16 +53,26 @@ public class MyFragment3 extends Fragment{
         outMoney = view.findViewById(R.id.outMoney);
         inMoney = view.findViewById(R.id.inMoney);
         restMoney = view.findViewById(R.id.restMoney);
-        tv_title = (TextView)view.findViewById(R.id.tv_title);
+        FabOptions fabOptions = (FabOptions) view.findViewById(R.id.fab_options);
+        fabOptions.setButtonsMenu(R.menu.fab_menu);
+        fabOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.faboptions_add:
+                        Toast.makeText(getActivity(), "you click add", Toast.LENGTH_SHORT).show();
+                        // TODO 跳转到添加账单页面
+                        break;
+                    case R.id.faboptions_graph:
+                        Toast.makeText(getActivity(), "you click graph", Toast.LENGTH_SHORT).show();
+                        // TODO 跳转到图表视图页面
+                        break;
+                }
+            }
+        });
+        account_title = (TextView)view.findViewById(R.id.account_title);
         recyclerView = (RecyclerView) view.findViewById(R.id.account_list);
-        tv_title.setText("本月账单明细");
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        account_title.setText("本月账单明细");
         pre = getActivity().getSharedPreferences("data", MODE_PRIVATE);
         String userId = pre.getString("username", "");
         Calendar c = Calendar.getInstance();
@@ -76,7 +87,9 @@ public class MyFragment3 extends Fragment{
                 .add("month", month)
                 .build();
         queryFromServer(URL + "searchAccount", requestBody);
+        return view;
     }
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,9 +114,21 @@ public class MyFragment3 extends Fragment{
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                double sumOut = 0;
+                                double sumIn = 0;
+                                for (Account account : result) {
+                                    if (account.getMoneyType().equals("支出")) {
+                                        sumOut += account.getMoney();
+                                    } else {
+                                        sumIn += account.getMoney();
+                                    }
+                                }
+                                inMoney.setText(String.valueOf(sumIn));
+                                outMoney.setText(String.valueOf(sumOut));
+                                restMoney.setText(String.valueOf(sumIn - sumOut));
                                 MyFragment3Adapter adapter = new MyFragment3Adapter(result);
                                 recyclerView.setAdapter(adapter);
-//                                recyclerView.setVisibility(View.VISIBLE);
+                                recyclerView.setVisibility(View.VISIBLE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                                 recyclerView.setLayoutManager(layoutManager);
 
@@ -113,7 +138,7 @@ public class MyFragment3 extends Fragment{
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                recyclerView.setVisibility(View.INVISIBLE);
+                                recyclerView.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getActivity(), "该月还没有任何账单哦！", Toast.LENGTH_SHORT).show();
                             }
                         });
