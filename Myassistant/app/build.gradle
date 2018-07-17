@@ -31,5 +31,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:26.+'
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.haibin:calendarview:3.0.6'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     testCompile 'junit:junit:4.12'
 }

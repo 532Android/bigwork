@@ -480,18 +480,23 @@ router.post('/searchClock', function (req, res, next) {
         msg: err.message
       });
     } else {
-      if (doc.length != 0) {
-        var returnResult = {
-          eventId: doc.eventId,
-          eventTitle: doc.eventTitle,
-          eventDate: doc.eventDate,
-          startTime: doc.startTime,
-          endTime: doc.endTime,
-          clockId: doc.clockList[0].clockId,
-          alertDate: doc.clockList[0].alertDate,
-          alertTime: doc.clockList[0].alertTime,
-          choosedSong: doc.clockList[0].choosedSong
-        };
+      if (doc) {
+        var returnResult = {};
+        doc.clockList.forEach((item) => {
+          if (clockId == item.clockId) {
+            returnResult = {
+              eventId: doc.eventId,
+              eventTitle: doc.eventTitle,
+              eventDate: doc.eventDate,
+              startTime: doc.startTime,
+              endTime: doc.endTime,
+              clockId: item.clockId,
+              alertDate: item.alertDate,
+              alertTime: item.alertTime,
+              choosedSong: item.choosedSong
+            };
+          }
+        })
         res.json({
           status: '1',
           msg: '',
