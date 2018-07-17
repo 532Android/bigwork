@@ -465,7 +465,6 @@ router.post('/searchClock', function (req, res, next) {
   var userId = req.body.userId;
   var eventId = req.body.eventId;
   var clockId = req.body.clockId;
-
   Richeng.findOne({
     userId: userId,
     eventId: eventId,

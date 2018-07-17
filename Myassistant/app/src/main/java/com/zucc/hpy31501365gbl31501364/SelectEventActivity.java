@@ -178,7 +178,8 @@ public class SelectEventActivity extends AppCompatActivity {
                         break;
                 }
             }
-            @Override public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });

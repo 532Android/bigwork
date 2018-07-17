@@ -4,11 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,9 +19,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
-import com.google.gson.Gson;
-import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -50,7 +46,12 @@ public class AddClockActivity extends AppCompatActivity {
     private TextView startTime;
     private TextView endTime;
     private TextView eventTitle;
-
+    private Spinner song;
+    private Button listen;
+    private MediaPlayer mp;
+    private List<String> dataList;
+    private ArrayAdapter<String> adapter;
+    private int songNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,32 @@ public class AddClockActivity extends AppCompatActivity {
         startTime = (TextView) findViewById(R.id.starttime);
         endTime = (TextView) findViewById(R.id.endtime);
         eventTitle = (TextView)findViewById(R.id.title);
+        listen = (Button)findViewById(R.id.listen);
+        song = (Spinner)findViewById(R.id.song);
+        dataList = new ArrayList<String>();
+        dataList.add("白羊-某某某");
+        dataList.add("体面-某某某");
+        adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,dataList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        song.setAdapter(adapter);
+        song.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                songNum = position;
+                switch (position){
+                    case 0:
+                        mp=MediaPlayer.create(AddClockActivity.this, R.raw.music1);
+                        break;
+                    case 1:
+                        mp=MediaPlayer.create(AddClockActivity.this, R.raw.music2);
+                        break;
+                }
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         TextView tv_title = (TextView)findViewById(R.id.tv_title);
         tv_title.setText("添加闹钟");
         Button tv_back = (Button)findViewById(R.id.tv_back);
@@ -82,6 +109,7 @@ public class AddClockActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                String choosedSong = "" + songNum;
                 String editdate = fordata.getText().toString();
                 String nian = editdate.substring(0, 4);
                 int k = editdate.indexOf("月", 5);
@@ -117,6 +145,7 @@ public class AddClockActivity extends AppCompatActivity {
                         .add("eventId", eventId)
                         .add("alertDate", date)
                         .add("alertTime", ttime)
+                        .add("choosedSong",choosedSong)
                         .build();
                 HttpUtil.postOkHttpRequest(URL + "addClock", requestBody, new okhttp3.Callback() {
                     @Override
@@ -180,6 +209,26 @@ public class AddClockActivity extends AppCompatActivity {
                 showTimePickerDialog();
             }
         });
+        listen.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(listen.getText().toString().trim().equals("试听")){
+                    try {
+                        mp.prepare();
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mp.start();
+                    listen.setText("暂停");
+                }
+                else if(listen.getText().toString().trim().equals("暂停")){
+                    mp.pause();
+                    listen.setText("试听");
+                }
+            }
+        });
     }
     private void queryFromServer(String address, RequestBody requestBody) {
         HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
@@ -229,5 +278,12 @@ public class AddClockActivity extends AppCompatActivity {
                 time.setText(hour+"时"+minute+"分");
             }
         },c.get(Calendar.HOUR), c.get(Calendar.MINUTE),true).show();
+    }
+    protected void onDestroy() {
+        if(mp.isPlaying()){
+            mp.stop();
+        }
+        mp.release();
+        super.onDestroy();
     }
 }

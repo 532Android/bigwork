@@ -129,6 +129,35 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设置提醒铃声:"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/song"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/listen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/background_light"
+                    android:text="试听"
+                    android:textColor="@android:color/holo_blue_light" />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/deleteclock"
                 android:layout_width="match_parent"
