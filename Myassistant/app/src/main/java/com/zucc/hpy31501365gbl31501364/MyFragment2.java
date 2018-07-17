@@ -133,16 +133,48 @@ public class MyFragment2 extends Fragment {
                 }
             }
         });
-//        String clocktime = prec.getString("clocktime", "");
-//        Log.e("asdasdasd",clocktime);
-////        if(clocktime!=null&&clocktime!=""){
-//            Intent intentc = new Intent("ELITOR_CLOCK");
-//            intentc.putExtra("msg","你该打酱油了");
-//            PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,intentc,0);
-//            AlarmManager  aManager = (AlarmManager)getActivity().getSystemService(Service.ALARM_SERVICE);
-//            aManager.setRepeating(AlarmManager.RTC_WAKEUP,System.currentTimeMillis(),5*1000,pi);
-////            aManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),pi);
-////        }
+        String clocktime = prec.getString("clocktime", "");
+        String clockdate = prec.getString("clockdate","");
+//        String ha =""+ 86400*(Long.parseLong("2006-1-1 9:59:31")-Long.parseLong("1970-1-1 0:0:0"));
+        String clocktitle = prec.getString("clocktitle","");
+        if(clocktime!=null&&clocktime!=""){
+//            String nian = clockdate.substring(0,4);
+//            int k = clockdate.indexOf("月",5);
+//            int j = clockdate.indexOf("日",k+1);
+//            String yue = clockdate.substring(5,k);
+//            String ri = clockdate.substring(k+1,j);
+//            if(yue.length()==1){
+//                yue="0"+yue;
+//            }
+//            if(ri.length()==1){
+//                ri="0"+ri;
+//            }
+//            String date = nian + yue + ri;
+            int l = clocktime.indexOf("时",0);
+            int m = clocktime.indexOf("分",l+1);
+            String shi = clocktime.substring(0,l);
+            String feng = clocktime.substring(l+1,m);
+            if(shi.length()==1){
+                shi="0"+shi;
+            }
+            if(feng.length()==1){
+                feng="0"+feng;
+            }
+            int sshi = Integer.parseInt(shi);
+            int ffeng = Integer.parseInt(feng);
+            String time = shi + feng +"00";
+            Intent intentc = new Intent(getActivity(),MyReceiver.class);
+            intentc.putExtra("msg",clocktitle);
+            PendingIntent pi = PendingIntent.getBroadcast(getActivity(),0,intentc,0);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.HOUR_OF_DAY, sshi);
+            calendar.set(Calendar.MINUTE, ffeng);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            AlarmManager  aManager = (AlarmManager)getActivity().getSystemService(Service.ALARM_SERVICE);
+            aManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+        }
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

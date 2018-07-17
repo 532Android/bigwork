@@ -3,6 +3,7 @@
     package="com.zucc.hpy31501365gbl31501364">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name="com.zucc.hpy31501365gbl31501364.MyApplication"
@@ -25,11 +26,7 @@
         <activity android:name=".SelectEventActivity" />
         <activity android:name=".EditClockActivity" />
         <activity android:name=".AddClockActivity" />
-        <receiver android:name=".MyReceiver">
-            <intent-filter>
-                <action android:name="ELITOR_CLOCK" />
-            </intent-filter>
-        </receiver>
+        <receiver android:name=".MyReceiver" android:process=":remote"/>
     </application>
 
 </manifest>

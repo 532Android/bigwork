@@ -28,6 +28,8 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
     private SharedPreferences prec;
     private SharedPreferences.Editor editorc;
     private String starttime;
+    private String clocktitle;
+    private String startdate;
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
         TextView eventdate;
@@ -81,6 +83,8 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 starttime = holder.startTime.getText().toString();
+                clocktitle = holder.eventTitle.getText().toString();
+                startdate = holder.eventdate.getText().toString();
                 prec = MyApplication.getContext().getSharedPreferences("clock", MODE_PRIVATE);
                 if (isChecked){
                     holder.eventdate.setTextColor(Color.parseColor("#99000000"));
@@ -88,11 +92,15 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
                     holder.startTime.setTextColor(Color.parseColor("#99000000"));
                     editorc = prec.edit();
                     editorc.putString("clocktime",starttime);
+                    editorc.putString("clocktitle",clocktitle);
+                    editorc.putString("clockdate",startdate);
                     editorc.commit();
                 }else {
                     holder.eventdate.setTextColor(Color.parseColor("#50000000"));
                     holder.eventTitle.setTextColor(Color.parseColor("#50000000"));
                     holder.startTime.setTextColor(Color.parseColor("#50000000"));
+                    editorc = prec.edit();
+                    editorc.clear();
                 }
             }
         });
