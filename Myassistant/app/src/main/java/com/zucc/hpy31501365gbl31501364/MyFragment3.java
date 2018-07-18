@@ -1,5 +1,6 @@
 package com.zucc.hpy31501365gbl31501364;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -46,33 +47,10 @@ public class MyFragment3 extends Fragment{
     private RecyclerView recyclerView;
     private SharedPreferences pre;
     private final String URL = "http://10.0.2.2:3000/accounts/";
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment3,container,false);
-        outMoney = view.findViewById(R.id.outMoney);
-        inMoney = view.findViewById(R.id.inMoney);
-        restMoney = view.findViewById(R.id.restMoney);
-        FabOptions fabOptions = (FabOptions) view.findViewById(R.id.fab_options);
-        fabOptions.setButtonsMenu(R.menu.fab_menu);
-        fabOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()) {
-                    case R.id.faboptions_add:
-                        Toast.makeText(getActivity(), "you click add", Toast.LENGTH_SHORT).show();
-                        // TODO 跳转到添加账单页面
-                        break;
-                    case R.id.faboptions_graph:
-                        Toast.makeText(getActivity(), "you click graph", Toast.LENGTH_SHORT).show();
-                        // TODO 跳转到图表视图页面
-                        break;
-                }
-            }
-        });
-        account_title = (TextView)view.findViewById(R.id.account_title);
-        recyclerView = (RecyclerView) view.findViewById(R.id.account_list);
-        account_title.setText("本月账单明细");
+    public void onResume() {
+        super.onResume();
         pre = getActivity().getSharedPreferences("data", MODE_PRIVATE);
         String userId = pre.getString("username", "");
         Calendar c = Calendar.getInstance();
@@ -87,6 +65,35 @@ public class MyFragment3 extends Fragment{
                 .add("month", month)
                 .build();
         queryFromServer(URL + "searchAccount", requestBody);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view=inflater.inflate(R.layout.fragment3,container,false);
+        outMoney = view.findViewById(R.id.outMoney);
+        inMoney = view.findViewById(R.id.inMoney);
+        restMoney = view.findViewById(R.id.restMoney);
+        FabOptions fabOptions = (FabOptions) view.findViewById(R.id.fab_options);
+        fabOptions.setButtonsMenu(R.menu.fab_menu);
+        fabOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()) {
+                    case R.id.faboptions_add:
+                        Intent intent = new Intent(getActivity(), AddAccountActivity.class);
+                        getActivity().startActivity(intent);
+                        break;
+                    case R.id.faboptions_graph:
+                        Intent intentToGraph = new Intent(getActivity(), AccountGraphActivity.class);
+                        getActivity().startActivity(intentToGraph);
+                        break;
+                }
+            }
+        });
+        account_title = (TextView)view.findViewById(R.id.account_title);
+        recyclerView = (RecyclerView) view.findViewById(R.id.account_list);
+        account_title.setText("本月账单明细");
         return view;
     }
 

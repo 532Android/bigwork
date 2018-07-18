@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddAccountActivity">
+
+    <include layout="@layout/title_bar"></include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内容简述：" />
+
+            <EditText
+                android:id="@+id/add_account_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="中大银泰洗脚套餐" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/choosetext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="选择：" />
+
+            <RadioGroup
+                android:id="@+id/chooseType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_toRightOf="@id/choosetext"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_out"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radiobutton_background"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="支出"
+                    android:textColor="@drawable/radiobutton_textcolor"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/btn_in"
+                    android:layout_width="0dp"
+                    android:layout_height="28dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radiobutton_background"
+                    android:button="@null"
+                    android:gravity="center"
+                    android:text="收入"
+                    android:textColor="@drawable/radiobutton_textcolor"
+                    android:textSize="14sp" />
+            </RadioGroup>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="类型:"
+                android:textAlignment="center" />
+
+            <Spinner
+                android:id="@+id/add_acccount_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日期:"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/add_acccount_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金额:"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/add_acccount_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number|numberDecimal"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注:"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/add_acccount_beizhu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:textAlignment="center" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/delete_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@android:color/holo_blue_light"
+            android:text="删除"
+            android:textColor="@android:color/background_light"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -57,6 +57,10 @@ public class MyFragment3Adapter  extends RecyclerView.Adapter <MyFragment3Adapte
                 int position = holder.getAdapterPosition();
                 Account account = mAccountList.get(position);
                 // TODO 点击进入编辑账单页面
+                Intent intent = new Intent(v.getContext(), AddAccountActivity.class);
+                intent.putExtra("accountId",account.getAccountId());
+                intent.putExtra("isEdit", true);
+                v.getContext().startActivity(intent);
             }
         });
         return holder;

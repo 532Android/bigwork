@@ -86,7 +86,7 @@ router.post('/addAccount', function (req, res, next) {
     month: month,
     day: day,
     moneyType: moneyType,
-    money: money,
+    money: money.toFixed(2),
     beizhu: beizhu
   }
   var accountModel = mongoose.model('account', Account.schema);
@@ -169,7 +169,7 @@ router.post('/editAccount', function (req, res, next) {
     month: month,
     day: day,
     moneyType: moneyType,
-    money: money,
+    money: money.toFixed(2),
     beizhu: beizhu
   }, function (err, doc) {
     if (err) {
