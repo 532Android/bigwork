@@ -1,13 +1,17 @@
 package com.zucc.hpy31501365gbl31501364;
 
 import android.app.AlarmManager;
+
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
     private String starttime;
     private String clocktitle;
     private String startdate;
+    private String cid;
     static class ViewHolder extends RecyclerView.ViewHolder {
         View eventView;
         TextView eventdate;
@@ -37,6 +42,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         TextView startTime;
         TextView eventId;
         Switch mswitch;
+        TextView clockid;
 
         public ViewHolder (View view) {
             super(view);
@@ -46,6 +52,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
             eventdate = (TextView) view.findViewById(R.id.eventdata);
             eventId = (TextView) view.findViewById(R.id.eventid);
             mswitch = (Switch) view.findViewById(R.id.starttime);
+            clockid = (TextView)view.findViewById(R.id.clockid);
         }
     }
 
@@ -79,12 +86,14 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         holder.eventTitle.setText(clock.getEventTitle());
         holder.startTime.setText(clock.getAlertTime());
         holder.eventId.setText(clock.getEventId());
+        holder.clockid.setText(clock.getClockId());
         holder.mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 starttime = holder.startTime.getText().toString();
                 clocktitle = holder.eventTitle.getText().toString();
                 startdate = holder.eventdate.getText().toString();
+                cid = holder.clockid.getText().toString();
                 prec = MyApplication.getContext().getSharedPreferences("clock", MODE_PRIVATE);
                 if (isChecked){
                     holder.eventdate.setTextColor(Color.parseColor("#99000000"));
@@ -94,13 +103,20 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
                     editorc.putString("clocktime",starttime);
                     editorc.putString("clocktitle",clocktitle);
                     editorc.putString("clockdate",startdate);
+                    editorc.putString("clockid",cid);
+                    editorc.putBoolean("on",true);
                     editorc.commit();
                 }else {
                     holder.eventdate.setTextColor(Color.parseColor("#50000000"));
                     holder.eventTitle.setTextColor(Color.parseColor("#50000000"));
                     holder.startTime.setTextColor(Color.parseColor("#50000000"));
                     editorc = prec.edit();
-                    editorc.clear();
+                    editorc.putString("clocktime",starttime);
+                    editorc.putString("clocktitle",clocktitle);
+                    editorc.putString("clockdate",startdate);
+                    editorc.putString("clockid",cid);
+                    editorc.putBoolean("on",false);
+                    editorc.commit();
                 }
             }
         });
