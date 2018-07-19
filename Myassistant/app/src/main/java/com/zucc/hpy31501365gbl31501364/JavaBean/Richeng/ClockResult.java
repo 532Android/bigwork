@@ -1,5 +1,7 @@
 package com.zucc.hpy31501365gbl31501364.JavaBean.Richeng;
 
+import java.util.concurrent.BlockingDeque;
+
 /**
  * Created by Administrator on 2018/7/14 0014.
  */
@@ -16,6 +18,7 @@ public class ClockResult {
     private String alertDate;
     private String alertTime;
     private String choosedSong;
+    private Boolean isClock;
     public String getEndTime() {
         return endTime;
     }
@@ -86,4 +89,8 @@ public class ClockResult {
     public void setChoosedSong(String choosedSong) {
         this.choosedSong = choosedSong;
     }
+
+    public  Boolean getIsClock(){return isClock;}
+
+    public  void setIsClock(Boolean isClock){this.isClock = isClock;}
 }

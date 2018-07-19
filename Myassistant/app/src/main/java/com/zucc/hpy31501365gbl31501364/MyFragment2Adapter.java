@@ -3,8 +3,10 @@ package com.zucc.hpy31501365gbl31501364;
 import android.app.AlarmManager;
 
 import android.app.PendingIntent;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -87,6 +89,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
         holder.startTime.setText(clock.getAlertTime());
         holder.eventId.setText(clock.getEventId());
         holder.clockid.setText(clock.getClockId());
+        prec = MyApplication.getContext().getSharedPreferences("clock", MODE_PRIVATE);
         holder.mswitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -94,7 +97,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
                 clocktitle = holder.eventTitle.getText().toString();
                 startdate = holder.eventdate.getText().toString();
                 cid = holder.clockid.getText().toString();
-                prec = MyApplication.getContext().getSharedPreferences("clock", MODE_PRIVATE);
+
                 if (isChecked){
                     holder.eventdate.setTextColor(Color.parseColor("#99000000"));
                     holder.eventTitle.setTextColor(Color.parseColor("#99000000"));
@@ -120,6 +123,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
                 }
             }
         });
+        holder.mswitch.setChecked(clock.getIsClock());
     }
 
     @Override

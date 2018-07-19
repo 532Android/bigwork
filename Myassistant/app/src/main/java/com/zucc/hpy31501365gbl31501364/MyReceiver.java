@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
@@ -12,47 +13,28 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * Created by L-Jere on 2018/7/16.
  */
 
 public class MyReceiver extends BroadcastReceiver {
-    private MediaPlayer mp;
+    private SharedPreferences prec;
+    private SharedPreferences.Editor editorc;
     @Override
     public void onReceive(final Context context, Intent intent)
     {
-//        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-//        dialogBuilder.setTitle("提示");
-//        dialogBuilder.setMessage("这是在BroadcastReceiver弹出的对话框。");
-//        dialogBuilder.setCancelable(false);
-//        dialogBuilder.setPositiveButton("确定", null);
-//        AlertDialog alertDialog = dialogBuilder.create();
-//        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-//        alertDialog.show();
-
+        prec =context.getSharedPreferences("clock", MODE_PRIVATE);
+        editorc = prec.edit();
+        editorc.putBoolean("on",false);
+        editorc.commit();
+        Intent newIntent = new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(newIntent);
         String msg = intent.getStringExtra("msg");
         msg = "您设定的日程" + msg + "到提醒时间了";
-        mp=MediaPlayer.create(context, R.raw.music1);
         Toast toast = Toast.makeText(context,msg,Toast.LENGTH_LONG);
-        View view = toast.getView();
-        view.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                try {
-                    mp.prepare();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mp.start();
-            }
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                mp.pause();
-            }
-        });
         toast.show();
     }
 }

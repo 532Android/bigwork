@@ -2,12 +2,17 @@ package com.zucc.hpy31501365gbl31501364;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -53,6 +58,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.zucc.hpy31501365gbl31501364.MyApplication.getContext;
 
 /**
@@ -193,24 +199,40 @@ public class MyFragment2 extends Fragment {
         intentc.putExtra("msg", clocktitle);
         PendingIntent pi = PendingIntent.getBroadcast(getActivity(), clockid, intentc, 0);
         AlarmManager aManager = (AlarmManager) getActivity().getSystemService(Service.ALARM_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Service.NOTIFICATION_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        calendar.set(Calendar.HOUR_OF_DAY, sshi);
+        calendar.set(Calendar.MINUTE, ffeng);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        if(yyue>month){
+            calendar.add(Calendar.DAY_OF_MONTH, getdate(toDate(startDate),toDate(endDate)));
+        }
         if(clockon) {
-            Notification notification = new NotificationCompat.Builder(getActivity())
-                    .setContentText("testtest")
-                    .build();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            calendar.set(Calendar.HOUR_OF_DAY, sshi);
-            calendar.set(Calendar.MINUTE, ffeng);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            if(yyue>month){
-                calendar.add(Calendar.DAY_OF_MONTH, getdate(toDate(startDate),toDate(endDate)));
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity());
+            mBuilder.setContentTitle(clocktitle)
+                    .setContentText("你设定闹钟的日程到时间了")
+                    .setTicker("你看不见我看不见我")
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
+                    .setSmallIcon(R.drawable.graph)
+                    .setWhen(calendar.getTimeInMillis())
+                    .setSound(Uri.parse("android.resource://com.zucc.hpy31501365gbl31501364/" + R.raw.music1))
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(""+clockid, "闹钟", NotificationManager
+                        .IMPORTANCE_DEFAULT);
+                mBuilder.setChannelId(""+clockid);
+                notificationManager.createNotificationChannel(channel);
             }
+            Notification notification = mBuilder.build();
+            notification.flags = Notification.FLAG_AUTO_CANCEL;
             aManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
-            editorc = prec.edit();
-            editorc.putBoolean("on",false);
-            editorc.commit();
+            mBuilder.setContentIntent(pi);
+            notificationManager.notify(clockid, mBuilder.build());
+
         }
         else{
             aManager.cancel(pi);
