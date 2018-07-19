@@ -141,80 +141,80 @@ public class MyFragment2 extends Fragment {
                 }
             }
         });
-        String clockdate = prec.getString("clockdate","");
-        String clocktime = prec.getString("clocktime", "");
-        String ClockId = prec.getString("clockid","");
-        String clocktitle = prec.getString("clocktitle","");
-        Boolean clockon = prec.getBoolean("on", Boolean.parseBoolean(""));
-        String ClockId2 = "";
-        if(ClockId != null && !"".equals(ClockId)) {
-            for (int i = 0; i < ClockId.length(); i++) {
-                if (ClockId.charAt(i) >= 48 && ClockId.charAt(i) <= 57) {
-                    if(ClockId2.length()<9) {
-                        ClockId2 += ClockId.charAt(i);
-                    }
-                }
-            }
-        }
-        int clockid = Integer.parseInt(ClockId2.trim());
-        String nian = clockdate.substring(0,4);
-        int k = clockdate.indexOf("月",5);
-        int j = clockdate.indexOf("日",k+1);
-        String yue = clockdate.substring(5,k);
-        String ri = clockdate.substring(k+1,j);
-        if(yue.length()==1){
-            yue="0"+yue;
-        }
-        if(ri.length()==1){
-            ri="0"+ri;
-        }
-        int yyue =  Integer.parseInt(yue);
-        int rri =  Integer.parseInt(ri);
-        String endDate = nian + "-" + yue + "-" + ri;
-        int l = clocktime.indexOf("时",0);
-        int m = clocktime.indexOf("分",l+1);
-        String shi = clocktime.substring(0,l);
-        String feng = clocktime.substring(l+1,m);
-        if(shi.length()==1){
-            shi="0"+shi;
-        }
-        if(feng.length()==1){
-            feng="0"+feng;
-        }
-        int sshi = Integer.parseInt(shi);
-        int ffeng = Integer.parseInt(feng);
-        Time t=new Time("GMT+8");
-        t.setToNow();
-        int year = t.year;
-        int month = t.month+1;
-        int day = t.monthDay;
-        String startDate = year + "-" + month + "-" + day;
-        Intent intentc = new Intent(getActivity(), MyReceiver.class);
-        intentc.putExtra("msg", clocktitle);
-        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), clockid, intentc, 0);
-        AlarmManager aManager = (AlarmManager) getActivity().getSystemService(Service.ALARM_SERVICE);
-        if(clockon) {
-            Notification notification = new NotificationCompat.Builder(getActivity())
-                    .setContentText("testtest")
-                    .build();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-            calendar.set(Calendar.HOUR_OF_DAY, sshi);
-            calendar.set(Calendar.MINUTE, ffeng);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            if(yyue>month){
-                calendar.add(Calendar.DAY_OF_MONTH, getdate(toDate(startDate),toDate(endDate)));
-            }
-            aManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
-            editorc = prec.edit();
-            editorc.putBoolean("on",false);
-            editorc.commit();
-        }
-        else{
-            aManager.cancel(pi);
-        }
+//        String clockdate = prec.getString("clockdate","");
+//        String clocktime = prec.getString("clocktime", "");
+//        String ClockId = prec.getString("clockid","");
+//        String clocktitle = prec.getString("clocktitle","");
+//        Boolean clockon = prec.getBoolean("on", Boolean.parseBoolean(""));
+//        String ClockId2 = "";
+//        if(ClockId != null && !"".equals(ClockId)) {
+//            for (int i = 0; i < ClockId.length(); i++) {
+//                if (ClockId.charAt(i) >= 48 && ClockId.charAt(i) <= 57) {
+//                    if(ClockId2.length()<9) {
+//                        ClockId2 += ClockId.charAt(i);
+//                    }
+//                }
+//            }
+//        }
+//        int clockid = Integer.parseInt(ClockId2.trim());
+//        String nian = clockdate.substring(0,4);
+//        int k = clockdate.indexOf("月",5);
+//        int j = clockdate.indexOf("日",k+1);
+//        String yue = clockdate.substring(5,k);
+//        String ri = clockdate.substring(k+1,j);
+//        if(yue.length()==1){
+//            yue="0"+yue;
+//        }
+//        if(ri.length()==1){
+//            ri="0"+ri;
+//        }
+//        int yyue =  Integer.parseInt(yue);
+//        int rri =  Integer.parseInt(ri);
+//        String endDate = nian + "-" + yue + "-" + ri;
+//        int l = clocktime.indexOf("时",0);
+//        int m = clocktime.indexOf("分",l+1);
+//        String shi = clocktime.substring(0,l);
+//        String feng = clocktime.substring(l+1,m);
+//        if(shi.length()==1){
+//            shi="0"+shi;
+//        }
+//        if(feng.length()==1){
+//            feng="0"+feng;
+//        }
+//        int sshi = Integer.parseInt(shi);
+//        int ffeng = Integer.parseInt(feng);
+//        Time t=new Time("GMT+8");
+//        t.setToNow();
+//        int year = t.year;
+//        int month = t.month+1;
+//        int day = t.monthDay;
+//        String startDate = year + "-" + month + "-" + day;
+//        Intent intentc = new Intent(getActivity(), MyReceiver.class);
+//        intentc.putExtra("msg", clocktitle);
+//        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0, intentc, 0);
+//        AlarmManager aManager = (AlarmManager) getActivity().getSystemService(Service.ALARM_SERVICE);
+//        if(clockon) {
+//            Notification notification = new NotificationCompat.Builder(getActivity())
+//                    .setContentText("testtest")
+//                    .build();
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTimeInMillis(System.currentTimeMillis());
+//            calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+//            calendar.set(Calendar.HOUR_OF_DAY, sshi);
+//            calendar.set(Calendar.MINUTE, ffeng);
+//            calendar.set(Calendar.SECOND, 0);
+//            calendar.set(Calendar.MILLISECOND, 0);
+//            if(yyue>month){
+//                calendar.add(Calendar.DAY_OF_MONTH, getdate(toDate(startDate),toDate(endDate)));
+//            }
+//            aManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
+//            editorc = prec.edit();
+//            editorc.putBoolean("on",false);
+//            editorc.commit();
+//        }
+//        else{
+//            aManager.cancel(pi);
+//        }
     }
 
     public Date toDate(String str) {

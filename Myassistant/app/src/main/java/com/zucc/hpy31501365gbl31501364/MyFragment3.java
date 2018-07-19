@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -123,16 +124,17 @@ public class MyFragment3 extends Fragment{
                             public void run() {
                                 double sumOut = 0;
                                 double sumIn = 0;
+                                DecimalFormat df = new DecimalFormat("#.00");
                                 for (Account account : result) {
                                     if (account.getMoneyType().equals("支出")) {
-                                        sumOut += account.getMoney();
+                                        sumOut += Double.valueOf(df.format(account.getMoney()));
                                     } else {
-                                        sumIn += account.getMoney();
+                                        sumIn += Double.valueOf(df.format(account.getMoney()));
                                     }
                                 }
                                 inMoney.setText(String.valueOf(sumIn));
                                 outMoney.setText(String.valueOf(sumOut));
-                                restMoney.setText(String.valueOf(sumIn - sumOut));
+                                restMoney.setText(df.format(sumIn - sumOut));
                                 MyFragment3Adapter adapter = new MyFragment3Adapter(result);
                                 recyclerView.setAdapter(adapter);
                                 recyclerView.setVisibility(View.VISIBLE);

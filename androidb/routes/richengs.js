@@ -295,7 +295,8 @@ router.post('/addClock', function (req, res, next) {
     clockId: clockId,
     alertDate: alertDate,
     alertTime: alertTime,
-    choosedSong: choosedSong
+    choosedSong: choosedSong,
+    isOpen: false
   }
 
   Richeng.update({
@@ -421,6 +422,46 @@ router.post("/editClock", function (req, res, next) {
   })
 });
 
+// 改变闹钟开启状态
+router.post("/openClock", function (req, res, next) {
+  var userId = req.body.userId;
+  var eventId = req.body.eventId;
+  var clockId = req.body.clockId;
+  var isOpen = req.body.isOpen;
+  Richeng.update({
+    userId: userId,
+    eventId: eventId,
+    clockList: {
+      "$elemMatch": {
+        clockId: clockId
+      }
+    }
+  }, {
+    "clockList.$.isOpen": isOpen
+  }, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '0',
+        msg: err.message
+      });
+    } else {
+      if (doc.n == 1) {
+        res.json({
+          status: '1',
+          msg: '',
+          result: 'toggle clock success'
+        });
+      } else {
+        res.json({
+          status: '3006',
+          msg: '',
+          result: 'toggle clock failed'
+        });
+      }
+    }
+  })
+});
+
 // 删除闹钟接口
 router.post('/deleteClock', function (req, res, next) {
   var userId = req.body.userId;
@@ -465,6 +506,7 @@ router.post('/searchClock', function (req, res, next) {
   var userId = req.body.userId;
   var eventId = req.body.eventId;
   var clockId = req.body.clockId;
+
   Richeng.findOne({
     userId: userId,
     eventId: eventId,
@@ -493,7 +535,8 @@ router.post('/searchClock', function (req, res, next) {
               clockId: item.clockId,
               alertDate: item.alertDate,
               alertTime: item.alertTime,
-              choosedSong: item.choosedSong
+              choosedSong: item.choosedSong,
+              isOpen: item.isOpen
             };
           }
         })

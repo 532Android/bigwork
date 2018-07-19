@@ -66,7 +66,8 @@ router.post('/addAccount', function (req, res, next) {
   var month = req.body.month;
   var day = req.body.day;
   var moneyType = req.body.moneyType;
-  var money = req.body.money;
+  var money = parseFloat(req.body.money).toFixed(2);
+  console.log(money);
   var beizhu = req.body.beizhu || '';
 
   // 随机生成accountId
@@ -86,7 +87,7 @@ router.post('/addAccount', function (req, res, next) {
     month: month,
     day: day,
     moneyType: moneyType,
-    money: money.toFixed(2),
+    money: money,
     beizhu: beizhu
   }
   var accountModel = mongoose.model('account', Account.schema);
@@ -100,6 +101,7 @@ router.post('/addAccount', function (req, res, next) {
       });
     } else {
       if (doc) {
+        console.log(doc);
         res.json({
           status: '1',
           msg: '',
@@ -156,7 +158,7 @@ router.post('/editAccount', function (req, res, next) {
   var month = req.body.month;
   var day = req.body.day;
   var moneyType = req.body.moneyType;
-  var money = req.body.money;
+  var money = parseFloat(req.body.money).toFixed(2);
   var beizhu = req.body.beizhu;
 
   Account.update({
@@ -169,7 +171,7 @@ router.post('/editAccount', function (req, res, next) {
     month: month,
     day: day,
     moneyType: moneyType,
-    money: money.toFixed(2),
+    money: money,
     beizhu: beizhu
   }, function (err, doc) {
     if (err) {
