@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -123,7 +124,7 @@ public class MyFragment2 extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getActivity(), "你还没有设置闹钟哦！", Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(getActivity(),"你还没有设置闹钟哦",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                             }
                         });
                     }

@@ -23,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 
@@ -217,7 +218,7 @@ public class MyFragment2Adapter extends RecyclerView.Adapter <MyFragment2Adapter
                                         if (status.equals("1")) {
 
                                         } else {
-                                            Toast.makeText(MainActivity.getMainActivity(), "闹钟设置失败", Toast.LENGTH_SHORT).show();
+                                            FancyToast.makeText(MainActivity.getMainActivity(),"闹钟设置失败",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                         }
                                     }
                                 });

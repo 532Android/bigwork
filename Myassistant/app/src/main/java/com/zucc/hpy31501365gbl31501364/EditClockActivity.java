@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -174,10 +175,10 @@ public class EditClockActivity extends AppCompatActivity {
                 }
                 String ttime = shi + "时" + feng + "分";
                 if(date.compareTo(eventDate.getText().toString())>0){
-                    Toast.makeText(getApplicationContext(),"提醒日期不能晚于该日程日期",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"提醒日期不能晚于该日程日期",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(date.compareTo(eventDate.getText().toString())==0&&ttime.compareTo(startTime.getText().toString())>0){
-                    Toast.makeText(getApplicationContext(),"提醒事件不能晚于该日程开始时间",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"提醒事件不能晚于该日程开始时间",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else{
                     RequestBody requestBody = new FormBody.Builder()
@@ -202,11 +203,11 @@ public class EditClockActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         if (status.equals("1")) {
-                                            Toast.makeText(getApplicationContext(),"修改成功",Toast.LENGTH_SHORT).show();
+                                            FancyToast.makeText(getApplicationContext(),"修改成功",FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                             finish();
                                         }
                                         else{
-                                            Toast.makeText(getApplicationContext(),"所修改闹钟有误",Toast.LENGTH_SHORT).show();
+                                            FancyToast.makeText(getApplicationContext(),"所修改闹钟有误",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                         }
                                     }
                                 });
@@ -242,11 +243,11 @@ public class EditClockActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     if (status.equals("1")) {
-                                        Toast.makeText(getApplicationContext(),"删除成功",Toast.LENGTH_SHORT).show();
+                                        FancyToast.makeText(getApplicationContext(),"删除成功",FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                         finish();
                                     }
                                     else{
-                                        Toast.makeText(getApplicationContext(),"所删除闹钟有误",Toast.LENGTH_SHORT).show();
+                                        FancyToast.makeText(getApplicationContext(),"删除过程有误",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                     }
                                 }
                             });

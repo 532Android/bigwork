@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -167,7 +168,7 @@ public class AddEventActivity extends AppCompatActivity {
                 String Title = title.getText().toString();
                 String Type = type.toString();
                 String Rating = rating1.toString();
-                String ForData = fordata.getText().toString().trim();
+                String ForData = fordata.getText().toString();
                 String nian = ForData.substring(0,4);
                 int k = ForData.indexOf("月",5);
                 int j = ForData.indexOf("日",k+1);

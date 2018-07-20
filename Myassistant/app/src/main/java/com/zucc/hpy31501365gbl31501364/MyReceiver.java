@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
+
 import java.io.IOException;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -31,7 +33,7 @@ public class MyReceiver extends BroadcastReceiver {
         context.startActivity(newIntent);
         String msg = intent.getStringExtra("msg");
         msg = "您设定的日程" + msg + "到提醒时间了";
-        Toast toast = Toast.makeText(context,msg,Toast.LENGTH_LONG);
-        toast.show();
+//        Toast toast = Toast.makeText(context,msg,Toast.LENGTH_LONG);
+        FancyToast.makeText(context, msg, FancyToast.LENGTH_LONG, FancyToast.INFO, false).show();
     }
 }

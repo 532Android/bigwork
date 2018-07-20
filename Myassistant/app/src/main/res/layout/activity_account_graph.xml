@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AccountGraphActivity">
+    tools:context=".AccountGraphActivity"
+    android:background="@drawable/touch_background">
 
     <include layout="@layout/title_bar"></include>
 
