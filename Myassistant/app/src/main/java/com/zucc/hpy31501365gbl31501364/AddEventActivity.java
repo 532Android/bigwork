@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 
 
@@ -207,22 +208,22 @@ public class AddEventActivity extends AppCompatActivity {
                 String Remark = remark.getText().toString();
                 String Talk = talk.getText().toString();
                 if(Title.length()==0){
-                    Toast.makeText(getApplicationContext(),"标题不能为空",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"标题不能为空",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(Rating.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择重要性",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"请选择重要性",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(ForData.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择日期",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"请选择日期",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(Time1.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择开始时间",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"请选择开始时间",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(Time2.length()==0){
-                    Toast.makeText(getApplicationContext(),"请选择结束时间",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"请选择结束时间",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(ttime.compareTo(tttime)>=0){
-                    Toast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else{
                     RequestBody requestBody = new FormBody.Builder()
@@ -251,12 +252,12 @@ public class AddEventActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         if (status.equals("1")) {
-                                            Toast.makeText(getApplicationContext(),"添加成功",Toast.LENGTH_SHORT).show();
+                                            FancyToast.makeText(getApplicationContext(),"添加成功",FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                             Intent intent = new Intent(AddEventActivity.this, MainActivity.class);
                                             startActivity(intent);
                                         }
                                         else{
-                                            Toast.makeText(getApplicationContext(),"所添加行程有误",Toast.LENGTH_SHORT).show();
+                                            FancyToast.makeText(getApplicationContext(),"所添加行程有误",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                         }
                                     }
                                 });

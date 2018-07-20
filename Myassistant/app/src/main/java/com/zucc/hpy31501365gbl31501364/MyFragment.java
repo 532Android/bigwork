@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.haibin.calendarview.CalendarView;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -181,7 +182,7 @@ public class MyFragment extends Fragment implements
                             @Override
                             public void run() {
                                 mRecyclerView.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getActivity(), "该天还没有日程计划哦！", Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(getActivity(), "该天还没有日程计划哦！", FancyToast.LENGTH_SHORT, FancyToast.INFO, false).show();
                             }
                         });
                     }
