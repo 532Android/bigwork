@@ -12,8 +12,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
-import com.zucc.hpy31501365gbl31501364.Util.Utill;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -111,14 +111,13 @@ public class logon extends AppCompatActivity {
                                             editors.commit();
                                         }
 
-                                        Toast.makeText(logon.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                        Utill.closeProgressDialog();
+                                        FancyToast.makeText(logon.this, "登录成功", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                         Intent intent = new Intent(logon.this,MainActivity.class);
                                         startActivity(intent);
                                         finish();
                                     }
                                     else {
-                                        Toast.makeText(logon.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                                        FancyToast.makeText(logon.this, "账号或密码错误", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                     }
                                 }
                             });

@@ -13,6 +13,10 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -26,6 +30,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.Account;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -46,20 +51,22 @@ import okhttp3.Response;
 
 public class AccountGraphActivity extends AppCompatActivity implements OnChartValueSelectedListener {
 
-    double sumOut = 0;
-    double sumIn = 0;
-    double typeBuy = 0;
-    double typeEat = 0;
-    double typeTraffic = 0;
-    double typeYule = 0;
-    double typeGift = 0;
-    double typeOutOther = 0;
-    double typeInOther = 0;
-    double typeLicai = 0;
-    double typeInMoney = 0;
+    private double sumOut;
+    private double sumIn;
+    private double typeBuy;
+    private double typeEat;
+    private double typeTraffic;
+    private double typeYule;
+    private double typeGift;
+    private double typeOutOther;
+    private double typeInOther;
+    private double typeLicai;
+    private double typeInMoney;
     private RecyclerView recyclerView;
+    private RadioGroup moneyType;
     private PieChart mPieChart;
-    private ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+    private ArrayList<PieEntry> entries;
+    private ArrayList<PieEntry> entriesIn;
     private SharedPreferences pre;
     private String URL = "http://10.0.2.2:3000/accounts/";
     private List<Account> result;
@@ -69,23 +76,56 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_graph);
         recyclerView = (RecyclerView) findViewById(R.id.account_graph_list);
+        TextView tv_title = (TextView) findViewById(R.id.tv_title);
+        tv_title.setText("月账单图表");
+        Button tv_back = (Button) findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         pre = getSharedPreferences("data", MODE_PRIVATE);
-        String userId = pre.getString("username", "");
+        final String userId = pre.getString("username", "");
         Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
+        final int year = c.get(Calendar.YEAR);
         String month = String.valueOf(c.get(Calendar.MONTH) + 1);
         if (month.length() == 1) {
             month = "0" + month;
         }
-        RequestBody requestBody = new FormBody.Builder()
-                .add("userId", userId)
-                .add("year", String.valueOf(year))
-                .add("month", month)
-                .build();
-        queryFromServer(URL + "searchAccount", requestBody);
+        final String yue = month;
+        moneyType = (RadioGroup) findViewById(R.id.graph_type);
+        moneyType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
+                sumOut = 0;
+                sumIn = 0;
+                typeBuy = 0;
+                typeEat = 0;
+                typeTraffic = 0;
+                typeYule = 0;
+                typeGift = 0;
+                typeOutOther = 0;
+                typeInOther = 0;
+                typeLicai = 0;
+                typeInMoney = 0;
+                entries = new ArrayList<PieEntry>();
+                entriesIn = new ArrayList<PieEntry>();
+                result = null;
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("userId", userId)
+                        .add("year", String.valueOf(year))
+                        .add("moneyType", radioButton.getText().toString())
+                        .add("month", yue)
+                        .build();
+                queryFromServer(URL + "searchAccount", requestBody, radioButton.getText().toString());
+            }
+        });
+        RadioButton radioButton = (RadioButton) findViewById(R.id.graph_out);
     }
 
-    private void queryFromServer(String address, RequestBody requestBody) {
+    private void queryFromServer(String address, RequestBody requestBody, final String moneyType) {
         HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -103,18 +143,20 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                DecimalFormat df = new DecimalFormat("#.00");
                                 for (Account account : result) {
                                     if (account.getMoneyType().equals("支出")) {
-                                        sumOut += account.getMoney();
+                                        sumOut += Double.valueOf(df.format(account.getMoney()));
                                     } else {
-                                        sumIn += account.getMoney();
+                                        sumIn += Double.valueOf(df.format(account.getMoney()));
                                     }
                                     sumAccountTypeMoney(account);
                                 }
-                                initView();
+                                sumOut = Double.valueOf(df.format(sumOut));
+                                sumIn = Double.valueOf(df.format(sumIn));
+                                initView(moneyType);
                                 MyFragment3Adapter adapter = new MyFragment3Adapter(result);
                                 recyclerView.setAdapter(adapter);
-                                recyclerView.setVisibility(View.VISIBLE);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(AccountGraphActivity.this);
                                 recyclerView.setLayoutManager(layoutManager);
                             }
@@ -123,7 +165,7 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(AccountGraphActivity.this, "该月还没有任何账单哦！", Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(AccountGraphActivity.this, "该月还没有任何账单哦！", FancyToast.LENGTH_SHORT, FancyToast.WARNING, true).show();
                             }
                         });
                     }
@@ -134,47 +176,7 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
         });
     }
 
-    private void postFromServer(String address, RequestBody requestBody) {
-        HttpUtil.postOkHttpRequest(address, requestBody, new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("AccountqueryFrom", e.toString());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-                try {
-                    JSONObject jsonObject = new JSONObject(responseData);
-                    final String status = jsonObject.getString("status");
-                    if (status.equals("1")) {
-                        final List<Account> result = JsonUtil.HandleAccountResponse(responseData);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                MyFragment3Adapter adapter = new MyFragment3Adapter(result);
-                                recyclerView.setAdapter(adapter);
-                                recyclerView.setVisibility(View.VISIBLE);
-                                LinearLayoutManager layoutManager = new LinearLayoutManager(AccountGraphActivity.this);
-                                recyclerView.setLayoutManager(layoutManager);
-                            }
-                        });
-                    } else if (status.equals("4001")) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(AccountGraphActivity.this, "该月还没有任何账单哦！", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void sumAccountTypeMoney (Account account) {
+    private void sumAccountTypeMoney(Account account) {
         switch (account.getAccountType()) {
             case "工资":
                 typeInMoney += account.getMoney();
@@ -207,15 +209,23 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
         }
     }
 
-    private void initPieEntry(Double money, String text) {
+    private void initOutPieEntry(Double money, String text) {
+        DecimalFormat df = new DecimalFormat("#.00");
         if (money != 0) {
-            float sum = new Double(money/sumOut).floatValue();
+            float sum = new Double(money / sumOut).floatValue();
             entries.add(new PieEntry(sum, text));
+        }
+    }
+    private void initInPieEntry(Double money, String text) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        if (money != 0) {
+            float sum = new Double(money / sumIn).floatValue();
+            entriesIn.add(new PieEntry(sum, text));
         }
     }
 
     //初始化View
-    private void initView() {
+    private void initView(String moneyType) {
 
         //饼状图
         mPieChart = (PieChart) findViewById(R.id.mPieChart);
@@ -225,7 +235,7 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
 
         mPieChart.setDragDecelerationFrictionCoef(0.95f);
         //设置中间文件
-        mPieChart.setCenterText(generateCenterSpannableText());
+        mPieChart.setCenterText(generateCenterSpannableText(moneyType));
 
         mPieChart.setDrawHoleEnabled(true);
         mPieChart.setHoleColor(Color.WHITE);
@@ -246,33 +256,26 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
         //变化监听
         mPieChart.setOnChartValueSelectedListener(this);
 
-        //模拟数据
-        initPieEntry(typeBuy, "购物");
-        initPieEntry(typeEat, "餐饮");
-        initPieEntry(typeTraffic, "交通");
-        initPieEntry(typeYule, "娱乐");
-        initPieEntry(typeOutOther, "其他");
-        initPieEntry(typeGift, "礼物");
-//        ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
-//        entries.add(new PieEntry(4, "优秀"));
-//        entries.add(new PieEntry(2, "满分"));
-//        entries.add(new PieEntry(3, "及格"));
-//        entries.add(new PieEntry(1, "不及格"));
-//        entries.add(new PieEntry(0, "xixi"));
+        //数据
+        if (moneyType.equals("支出")) {
+            initOutPieEntry(typeBuy, "购物");
+            initOutPieEntry(typeEat, "餐饮");
+            initOutPieEntry(typeTraffic, "交通");
+            initOutPieEntry(typeYule, "娱乐");
+            initOutPieEntry(typeOutOther, "其他");
+            initOutPieEntry(typeGift, "礼物");
+            //设置数据
+            setData(entries);
+        } else {
+            initInPieEntry(typeInMoney, "工资");
+            initInPieEntry(typeLicai, "理财");
+            initInPieEntry(typeInOther, "其他");
+            //设置数据
+            setData(entriesIn);
+        }
 
-        //设置数据
-        setData(entries);
 
         mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-//
-//        Legend l = mPieChart.getLegend();
-//        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-//        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-//        l.setOrientation(Legend.LegendOrientation.VERTICAL);
-//        l.setDrawInside(false);
-//        l.setXEntrySpace(7f);
-//        l.setYEntrySpace(0f);
-//        l.setYOffset(0f);
 
         // 输入标签样式
         mPieChart.setEntryLabelColor(Color.DKGRAY);
@@ -280,15 +283,14 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
     }
 
     //设置中间文字
-    private SpannableString generateCenterSpannableText() {
-        //原文：MPAndroidChart\ndeveloped by Philipp Jahoda
-        SpannableString s = new SpannableString("总支出：\n" + String.valueOf(sumOut) + "元");
-//        s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
-//        s.setSpan(new StyleSpan(Typeface.NORMAL), 14, s.length() - 15, 0);
-//         s.setSpan(new ForegroundColorSpan(Color.GRAY), 14, s.length() - 15, 0);
-//        s.setSpan(new RelativeSizeSpan(.8f), 14, s.length() - 15, 0);
-//         s.setSpan(new StyleSpan(Typeface.ITALIC), s.length() - 14, s.length(), 0);
-//         s.setSpan(new ForegroundColorSpan(ColorTemplate.getHoloBlue()), s.length() - 14, s.length(), 0);
+    private SpannableString generateCenterSpannableText(String moneyType) {
+        SpannableString s;
+        if (moneyType.equals("支出")) {
+            s = new SpannableString("总支出：\n" + String.valueOf(sumOut) + "元");
+        } else {
+            s = new SpannableString("总收入：\n" + String.valueOf(sumIn) + "元");
+        }
+
         return s;
     }
 
@@ -325,7 +327,7 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
 
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        String aType = ((PieEntry)e).getLabel();
+        String aType = ((PieEntry) e).getLabel();
         List<Account> rest = new ArrayList<>();
         for (Account item : result) {
             if (aType.equals(item.getAccountType())) {
@@ -334,7 +336,6 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
         }
         MyFragment3Adapter adapter = new MyFragment3Adapter(rest);
         recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(AccountGraphActivity.this);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -343,7 +344,6 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
     public void onNothingSelected() {
         MyFragment3Adapter adapter = new MyFragment3Adapter(result);
         recyclerView.setAdapter(adapter);
-        recyclerView.setVisibility(View.VISIBLE);
         LinearLayoutManager layoutManager = new LinearLayoutManager(AccountGraphActivity.this);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -351,19 +351,35 @@ public class AccountGraphActivity extends AppCompatActivity implements OnChartVa
     @Override
     protected void onResume() {
         super.onResume();
-//        pre = getSharedPreferences("data", MODE_PRIVATE);
-//        String userId = pre.getString("username", "");
-//        Calendar c = Calendar.getInstance();
-//        int year = c.get(Calendar.YEAR);
-//        String month = String.valueOf(c.get(Calendar.MONTH) + 1);
-//        if (month.length() == 1) {
-//            month = "0" + month;
-//        }
-//        RequestBody requestBody = new FormBody.Builder()
-//                .add("userId", userId)
-//                .add("year", String.valueOf(year))
-//                .add("month", month)
-//                .build();
-//        queryFromServer(URL + "searchAccount", requestBody);
+        pre = getSharedPreferences("data", MODE_PRIVATE);
+        final String userId = pre.getString("username", "");
+        Calendar c = Calendar.getInstance();
+        final int year = c.get(Calendar.YEAR);
+        String month = String.valueOf(c.get(Calendar.MONTH) + 1);
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        final String yue = month;
+        sumOut = 0;
+        sumIn = 0;
+        typeBuy = 0;
+        typeEat = 0;
+        typeTraffic = 0;
+        typeYule = 0;
+        typeGift = 0;
+        typeOutOther = 0;
+        typeInOther = 0;
+        typeLicai = 0;
+        typeInMoney = 0;
+        entries = new ArrayList<PieEntry>();
+        entriesIn = new ArrayList<PieEntry>();
+        result = null;
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId", userId)
+                .add("year", String.valueOf(year))
+                .add("moneyType", "支出")
+                .add("month", yue)
+                .build();
+        queryFromServer(URL + "searchAccount", requestBody,"支出");
     }
 }

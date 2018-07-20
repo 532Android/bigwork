@@ -12,6 +12,7 @@ router.post('/searchAccount', function (req, res, next) {
   var year = req.body.year;
   var month = req.body.month;
   var day = req.body.day;
+  var moneyType = req.body.moneyType;
   
   var findAccount = {
     userId: userId,
@@ -19,7 +20,8 @@ router.post('/searchAccount', function (req, res, next) {
     accountType: accountType,
     year: year,
     month: month,
-    day: day
+    day: day,
+    moneyType: moneyType
   }
   
   // 遍历对象属性，删除掉值为undefined的属性

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 
 import org.json.JSONException;
@@ -61,19 +62,19 @@ public class sign_up extends AppCompatActivity {
                 String P1 = Password1.getText().toString();
                 String P2 = Password2.getText().toString();
                 if(N.length()==0){
-                    Toast.makeText(getApplicationContext(),"昵称不能为空",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"昵称不能为空", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(Un.length()==0){
-                    Toast.makeText(getApplicationContext(),"帐号不能为空",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"帐号不能为空",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(P1.length()==0){
-                    Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"密码不能为空",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(P2.length()==0){
-                    Toast.makeText(getApplicationContext(),"密码不能为空",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"密码不能为空",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else if(!P1.equals(P2)){
-                    Toast.makeText(getApplicationContext(),"两次密码不相等",Toast.LENGTH_SHORT).show();
+                    FancyToast.makeText(getApplicationContext(),"两次密码不相等",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else{
                     RequestBody requestBody = new FormBody.Builder()
@@ -95,15 +96,15 @@ public class sign_up extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 if (status.equals("1000")) {
-                                                    Toast.makeText(getApplicationContext(),"用户已存在",Toast.LENGTH_SHORT).show();
+                                                    FancyToast.makeText(getApplicationContext(),"用户已存在",FancyToast.LENGTH_SHORT, FancyToast.WARNING, true).show();
                                                 }
                                                 else if(status.equals("1")){
-                                                    Toast.makeText(getApplicationContext(),"注册成功",Toast.LENGTH_SHORT).show();
+                                                    FancyToast.makeText(getApplicationContext(),"注册成功",FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                                     Intent intent = new Intent(sign_up.this, logon.class);
                                                     startActivity(intent);
                                                 }
                                                 else{
-                                                    Toast.makeText(getApplicationContext(),"注册信息有误",Toast.LENGTH_SHORT).show();
+                                                    FancyToast.makeText(getApplicationContext(),"注册信息有误",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                                 }
                                             }
                                         });

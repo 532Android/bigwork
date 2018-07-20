@@ -132,8 +132,8 @@ public class MyFragment3 extends Fragment{
                                         sumIn += Double.valueOf(df.format(account.getMoney()));
                                     }
                                 }
-                                inMoney.setText(String.valueOf(sumIn));
-                                outMoney.setText(String.valueOf(sumOut));
+                                inMoney.setText(df.format(sumIn));
+                                outMoney.setText(df.format(sumOut));
                                 restMoney.setText(df.format(sumIn - sumOut));
                                 MyFragment3Adapter adapter = new MyFragment3Adapter(result);
                                 recyclerView.setAdapter(adapter);

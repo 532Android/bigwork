@@ -17,7 +17,8 @@ var riChengSchema = new mongoose.Schema({
       "clockId": String,
       "alertDate": String,
       "alertTime": String,
-      "choosedSong": String
+      "choosedSong": String,
+      "isOpen": Boolean
     }
   ]
 });

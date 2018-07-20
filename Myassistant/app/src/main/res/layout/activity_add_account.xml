@@ -28,7 +28,7 @@
                 android:id="@+id/add_account_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="中大银泰洗脚套餐" />
+                />
         </LinearLayout>
 
         <RelativeLayout

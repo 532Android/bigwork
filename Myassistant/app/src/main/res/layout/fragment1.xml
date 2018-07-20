@@ -11,167 +11,92 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <android.support.v4.widget.NestedScrollView
 
-        android:layout_width="match_parent"
-
-        android:layout_height="wrap_content">
-
-
-        <LinearLayout
-
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            android:layout_height="wrap_content"
-
-            android:orientation="vertical">
-
-
-            <RelativeLayout
-
-                android:id="@+id/rl_tool"
-
+            <LinearLayout
                 android:layout_width="match_parent"
-
-                android:layout_height="52dp"
-
-                android:background="#fff">
-
-
-                <TextView
-
-                    android:id="@+id/tv_month_day"
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="match_parent"
-
-                    android:gravity="center_vertical"
-
-                    android:paddingLeft="16dp"
-
-                    android:textColor="#000000"
-
-                    android:textSize="26sp"
-
-                    android:textStyle="bold"
-
-                    tools:ignore="RtlSymmetry" />
-
-
-                <LinearLayout
-
-                    android:layout_width="wrap_content"
-
-                    android:layout_height="match_parent"
-
-                    android:layout_toRightOf="@+id/tv_month_day"
-
-                    android:orientation="vertical"
-
-                    android:paddingBottom="12dp"
-
-                    android:paddingLeft="6dp"
-
-                    android:paddingRight="6dp"
-
-                    android:paddingTop="12dp"
-
-                    tools:ignore="RelativeOverlap">
-
-
-                    <TextView
-
-                        android:id="@+id/tv_year"
-
-                        android:layout_width="wrap_content"
-
-                        android:layout_height="0dp"
-
-                        android:layout_weight="1"
-
-                        android:gravity="center"
-
-                        android:textColor="#000000"
-
-                        android:textSize="10sp" />
-
-
-                    <TextView
-
-                        android:id="@+id/tv_lunar"
-
-                        android:layout_width="wrap_content"
-
-                        android:layout_height="0dp"
-
-                        android:layout_weight="1"
-
-                        android:gravity="center"
-
-                        android:textColor="#000000"
-
-                        android:textSize="10sp"
-
-                        tools:ignore="SmallSp" />
-
-                </LinearLayout>
-
-
-            </RelativeLayout>
-
-
-            <com.haibin.calendarview.CalendarView
-
-                android:id="@+id/calendarView"
-
-                android:layout_width="match_parent"
-
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                android:background="#fff"
+                <RelativeLayout
+                    android:id="@+id/rl_tool"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:background="#fff">
 
-                app:calendar_card_view="com.zucc.hpy31501365gbl31501364.MeiZuCalendarCardView"
+                    <TextView
+                        android:id="@+id/tv_month_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="16dp"
+                        android:textColor="#000000"
+                        android:textSize="26sp"
+                        android:textStyle="bold"
+                        tools:ignore="RtlSymmetry" />
 
-                app:current_month_lunar_text_color="#CFCFCF"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@+id/tv_month_day"
+                        android:orientation="vertical"
+                        android:paddingBottom="12dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingTop="12dp"
+                        tools:ignore="RelativeOverlap">
 
-                app:current_month_text_color="#333333"
+                        <TextView
+                            android:id="@+id/tv_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="#000000"
+                            android:textSize="10sp" />
 
-                app:min_year="2015"
+                        <TextView
+                            android:id="@+id/tv_lunar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="#000000"
+                            android:textSize="10sp"
+                            tools:ignore="SmallSp" />
+                    </LinearLayout>
+                </RelativeLayout>
 
-                app:other_month_text_color="#e1e1e1"
+                <com.haibin.calendarview.CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    app:current_month_lunar_text_color="#CFCFCF"
+                    app:current_month_text_color="#333333"
+                    app:min_year="2015"
+                    app:other_month_text_color="#e1e1e1"
+                    app:scheme_text="假"
+                    app:scheme_text_color="#333"
+                    app:scheme_theme_color="#128c4b"
+                    app:selected_lunar_text_color="#CFCFCF"
+                    app:selected_text_color="#333"
+                    app:selected_theme_color="#108cd4"
+                    app:week_background="#fff"
+                    app:week_text_color="#111" />
 
-                app:scheme_text="假"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/richeng_List"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
-                app:scheme_text_color="#333"
+            </LinearLayout>
 
-                app:scheme_theme_color="#128c4b"
+        </android.support.v4.widget.NestedScrollView>
 
-                app:selected_lunar_text_color="#CFCFCF"
-
-                app:selected_text_color="#333"
-
-                app:selected_theme_color="#108cd4"
-
-                app:week_background="#fff"
-
-                app:week_text_color="#111" />
-
-
-            <android.support.v7.widget.RecyclerView
-
-                android:id="@+id/richeng_List"
-
-                android:layout_width="match_parent"
-
-                android:layout_height="match_parent">
-
-
-            </android.support.v7.widget.RecyclerView>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/Addeventbutton"
             android:layout_width="match_parent"
@@ -179,10 +104,10 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="15dp"
             android:clickable="true"
-            app:fabSize="mini"
             app:elevation="6dp"
+            app:fabSize="mini"
             app:pressedTranslationZ="12dp"
-            app:srcCompat="@android:drawable/ic_input_add" />
+            app:srcCompat="@drawable/btn_add" />
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

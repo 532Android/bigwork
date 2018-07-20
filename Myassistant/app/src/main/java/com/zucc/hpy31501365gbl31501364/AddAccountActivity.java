@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.Account;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
@@ -186,18 +187,18 @@ public class AddAccountActivity extends AppCompatActivity {
 
     private void checkDataAndSend() {
         if (aTitle.length() == 0) {
-            Toast.makeText(getApplicationContext(), "请输入内容！", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(getApplicationContext(), "请输入内容！", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         } else if (mType.length() == 0) {
-            Toast.makeText(getApplicationContext(), "请先选择收入或支出", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(getApplicationContext(), "请先选择收入或支出", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         } else if (aType.length() == 0) {
-            Toast.makeText(getApplicationContext(), "请选择类型", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(getApplicationContext(), "请选择类型", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         } else if (aDate.length() == 0) {
-            Toast.makeText(getApplicationContext(), "请选择日期", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(getApplicationContext(), "请选择日期", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         } else if (aMoney.length() == 0) {
-            Toast.makeText(getApplicationContext(), "请输入金额", Toast.LENGTH_SHORT).show();
+            FancyToast.makeText(getApplicationContext(), "请输入金额", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
         } else {
             if (aType.equals("请先选择收入或支出")) {
-                Toast.makeText(getApplicationContext(), "请先选择收入或支出", Toast.LENGTH_SHORT).show();
+                FancyToast.makeText(getApplicationContext(), "请先选择收入或支出", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
             } else {
                 if (flag) {
                     addToServer("editAccount");
@@ -243,7 +244,7 @@ public class AddAccountActivity extends AppCompatActivity {
                                 accountMoney.setText(String.valueOf(account.get(0).getMoney()));
                                 accountBeizhu.setText(account.get(0).getBeizhu());
                             } else {
-                                Toast.makeText(getApplicationContext(),"查询数据失败",Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(getApplicationContext(),"查询数据失败",FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                             }
                         }
                     });
@@ -294,17 +295,17 @@ public class AddAccountActivity extends AppCompatActivity {
                         public void run() {
                             if (flag) {
                                 if (status.equals("1")) {
-                                    Toast.makeText(getApplicationContext(), "编辑成功", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "编辑成功", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                     finish();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "编辑账单失败", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "编辑账单失败", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                 }
                             } else {
                                 if (status.equals("1")) {
-                                    Toast.makeText(getApplicationContext(), "添加成功", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "添加成功", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                     finish();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "添加账单失败", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "添加账单失败", FancyToast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                 }
                             }
                         }
@@ -336,10 +337,10 @@ public class AddAccountActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                                 if (status.equals("1")) {
-                                    Toast.makeText(getApplicationContext(), "删除账单成功", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "删除账单成功", FancyToast.LENGTH_SHORT, FancyToast.SUCCESS, true).show();
                                     finish();
                                 } else {
-                                    Toast.makeText(getApplicationContext(), "删除账单失败", Toast.LENGTH_SHORT).show();
+                                    FancyToast.makeText(getApplicationContext(), "删除账单失败", Toast.LENGTH_SHORT, FancyToast.ERROR, true).show();
                                 }
                             }
 
