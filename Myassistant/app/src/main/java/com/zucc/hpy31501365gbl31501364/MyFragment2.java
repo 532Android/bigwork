@@ -6,7 +6,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
@@ -26,40 +25,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.ClockResult;
-import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
 import com.zucc.hpy31501365gbl31501364.Util.JsonUtil;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.TimeZone;
 
 import okhttp3.Call;
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.zucc.hpy31501365gbl31501364.MyApplication.getContext;
 
 /**
  * Created by L-Jere on 2018/7/11.
@@ -72,6 +58,7 @@ public class MyFragment2 extends Fragment {
     private SharedPreferences prec;
     private SharedPreferences.Editor editorc;
     private final String URL = "http://10.0.2.2:3000/richengs/";
+    private int clockcount = 0;
 
     @Nullable
     @Override
@@ -105,7 +92,6 @@ public class MyFragment2 extends Fragment {
             }
         });
         getFromServer(URL + "findAllClock?userId=" + userId);
-
         return view;
     }
 
@@ -131,7 +117,6 @@ public class MyFragment2 extends Fragment {
                                 mRecyclerView.setAdapter(adapter);
                                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                                 mRecyclerView.setLayoutManager(layoutManager);
-
                             }
                         });
                     } else if (status.equals("3002")) {
@@ -147,127 +132,6 @@ public class MyFragment2 extends Fragment {
                 }
             }
         });
-        String clockdate = prec.getString("clockdate","");
-        String clocktime = prec.getString("clocktime", "");
-        String ClockId = prec.getString("clockid","");
-        String clocktitle = prec.getString("clocktitle","");
-        Boolean clockon = prec.getBoolean("on", Boolean.parseBoolean(""));
-        String ClockId2 = "";
-        if(ClockId != null && !"".equals(ClockId)) {
-            for (int i = 0; i < ClockId.length(); i++) {
-                if (ClockId.charAt(i) >= 48 && ClockId.charAt(i) <= 57) {
-                    if(ClockId2.length()<9) {
-                        ClockId2 += ClockId.charAt(i);
-                    }
-                }
-            }
-        }
-        int clockid = Integer.parseInt(ClockId2.trim());
-        String nian = clockdate.substring(0,4);
-        int k = clockdate.indexOf("月",5);
-        int j = clockdate.indexOf("日",k+1);
-        String yue = clockdate.substring(5,k);
-        String ri = clockdate.substring(k+1,j);
-        if(yue.length()==1){
-            yue="0"+yue;
-        }
-        if(ri.length()==1){
-            ri="0"+ri;
-        }
-        int yyue =  Integer.parseInt(yue);
-        int rri =  Integer.parseInt(ri);
-        String endDate = nian + "-" + yue + "-" + ri;
-        int l = clocktime.indexOf("时",0);
-        int m = clocktime.indexOf("分",l+1);
-        String shi = clocktime.substring(0,l);
-        String feng = clocktime.substring(l+1,m);
-        if(shi.length()==1){
-            shi="0"+shi;
-        }
-        if(feng.length()==1){
-            feng="0"+feng;
-        }
-        int sshi = Integer.parseInt(shi);
-        int ffeng = Integer.parseInt(feng);
-        Time t=new Time("GMT+8");
-        t.setToNow();
-        int year = t.year;
-        int month = t.month+1;
-        int day = t.monthDay;
-        String startDate = year + "-" + month + "-" + day;
-        Intent intentc = new Intent(getActivity(), MyReceiver.class);
-        intentc.putExtra("msg", clocktitle);
-        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), clockid, intentc, 0);
-        AlarmManager aManager = (AlarmManager) getActivity().getSystemService(Service.ALARM_SERVICE);
-        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Service.NOTIFICATION_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.setTimeZone(TimeZone.getTimeZone("GMT+8"));
-        calendar.set(Calendar.HOUR_OF_DAY, sshi);
-        calendar.set(Calendar.MINUTE, ffeng);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        if(yyue>month){
-            calendar.add(Calendar.DAY_OF_MONTH, getdate(toDate(startDate),toDate(endDate)));
-        }
-        if(clockon) {
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity());
-            mBuilder.setContentTitle(clocktitle)
-                    .setContentText("你设定闹钟的日程到时间了")
-                    .setTicker("你看不见我看不见我")
-                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.logo))
-                    .setSmallIcon(R.drawable.graph)
-                    .setWhen(calendar.getTimeInMillis())
-                    .setSound(Uri.parse("android.resource://com.zucc.hpy31501365gbl31501364/" + R.raw.music1))
-                    .setPriority(Notification.PRIORITY_MAX)
-                    .setOngoing(true);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel channel = new NotificationChannel(""+clockid, "闹钟", NotificationManager
-                        .IMPORTANCE_DEFAULT);
-                mBuilder.setChannelId(""+clockid);
-                notificationManager.createNotificationChannel(channel);
-            }
-            Notification notification = mBuilder.build();
-            notification.flags = Notification.FLAG_AUTO_CANCEL;
-            aManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
-            mBuilder.setContentIntent(pi);
-            notificationManager.notify(clockid, mBuilder.build());
-
-        }
-        else{
-            aManager.cancel(pi);
-        }
-    }
-
-    public Date toDate(String str) {
-        Date date;
-        try {
-            java.text.SimpleDateFormat formatter = new SimpleDateFormat(
-                    "yyyy-MM-dd HH:mm:ss");
-            date = formatter.parse(str);
-            return date;
-        } catch (Exception e) {
-
-        }
-        return null;
-    }
-
-        public static int getdate(Date startDate, Date endDate) {
-        Calendar fromCalendar = Calendar.getInstance();
-        fromCalendar.setTime(startDate);
-        fromCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        fromCalendar.set(Calendar.MINUTE, 0);
-        fromCalendar.set(Calendar.SECOND, 0);
-        fromCalendar.set(Calendar.MILLISECOND, 0);
-
-        Calendar toCalendar = Calendar.getInstance();
-        toCalendar.setTime(endDate);
-        toCalendar.set(Calendar.HOUR_OF_DAY, 0);
-        toCalendar.set(Calendar.MINUTE, 0);
-        toCalendar.set(Calendar.SECOND, 0);
-        toCalendar.set(Calendar.MILLISECOND, 0);
-
-        return (int) ((toCalendar.getTime().getTime() - fromCalendar.getTime().getTime()) / (1000 * 60 * 60 * 24));
     }
 
     @Override

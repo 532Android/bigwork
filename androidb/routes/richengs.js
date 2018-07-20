@@ -356,7 +356,8 @@ router.get('/findAllClock', function (req, res, next) {
               clockId: clockItem.clockId,
               alertDate: clockItem.alertDate,
               alertTime: clockItem.alertTime,
-              choosedSong: clockItem.choosedSong
+              choosedSong: clockItem.choosedSong,
+              isOpen: clockItem.isOpen
             }
             returnResult.push(temp);
           })

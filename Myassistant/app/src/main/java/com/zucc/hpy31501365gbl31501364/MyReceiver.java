@@ -27,9 +27,6 @@ public class MyReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent)
     {
         prec =context.getSharedPreferences("clock", MODE_PRIVATE);
-        editorc = prec.edit();
-        editorc.putBoolean("on",false);
-        editorc.commit();
         Intent newIntent = new Intent(context, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(newIntent);
         String msg = intent.getStringExtra("msg");

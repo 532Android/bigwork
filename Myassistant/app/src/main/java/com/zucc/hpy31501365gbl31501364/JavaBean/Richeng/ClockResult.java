@@ -18,7 +18,7 @@ public class ClockResult {
     private String alertDate;
     private String alertTime;
     private String choosedSong;
-    private Boolean isClock;
+    private Boolean isOpen;
     public String getEndTime() {
         return endTime;
     }
@@ -90,7 +90,7 @@ public class ClockResult {
         this.choosedSong = choosedSong;
     }
 
-    public  Boolean getIsClock(){return isClock;}
+    public  Boolean getIsOpen(){return isOpen;}
 
-    public  void setIsClock(Boolean isClock){this.isClock = isClock;}
+    public  void setIsOpen(Boolean isOpen){this.isOpen = isOpen;}
 }

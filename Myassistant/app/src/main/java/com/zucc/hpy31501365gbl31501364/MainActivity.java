@@ -86,5 +86,8 @@ public class MainActivity extends AppCompatActivity {
             mViewPager.setCurrentItem(1);
         }
     }
+    public MainActivity() {mainActivity = this;}
+    public static MainActivity getMainActivity(){return mainActivity;}
+    private static MainActivity mainActivity;
 }
 
