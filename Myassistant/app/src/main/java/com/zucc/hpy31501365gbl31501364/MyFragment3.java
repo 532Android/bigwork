@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.joaquimley.faboptions.FabOptions;
+import com.shashank.sony.fancytoastlib.FancyToast;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.Account;
 import com.zucc.hpy31501365gbl31501364.JavaBean.Richeng.RichengResult;
 import com.zucc.hpy31501365gbl31501364.Util.HttpUtil;
@@ -148,7 +149,7 @@ public class MyFragment3 extends Fragment{
                             @Override
                             public void run() {
                                 recyclerView.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getActivity(), "该月还没有任何账单哦！", Toast.LENGTH_SHORT).show();
+                                FancyToast.makeText(getActivity(), "该月还没有任何账单哦！", FancyToast.LENGTH_SHORT, FancyToast.WARNING, true).show();
                             }
                         });
                     }
