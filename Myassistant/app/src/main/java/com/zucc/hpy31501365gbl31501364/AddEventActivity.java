@@ -169,18 +169,6 @@ public class AddEventActivity extends AppCompatActivity {
                 String Type = type.toString();
                 String Rating = rating1.toString();
                 String ForData = fordata.getText().toString();
-                String nian = ForData.substring(0,4);
-                int k = ForData.indexOf("月",5);
-                int j = ForData.indexOf("日",k+1);
-                String yue = ForData.substring(5,k);
-                String ri = ForData.substring(k+1,j);
-                if(yue.length()==1){
-                    yue="0"+yue;
-                }
-                if(ri.length()==1){
-                    ri="0"+ri;
-                }
-                String date = nian + "年" + yue + "月" + ri + "日";
                 String Time1 = time1.getText().toString().trim();
                 int l = Time1.indexOf("时",0);
                 int m = Time1.indexOf("分",l+1);
@@ -227,6 +215,18 @@ public class AddEventActivity extends AppCompatActivity {
                     FancyToast.makeText(getApplicationContext(),"开始时间不能大于等于结束时间",FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
                 }
                 else{
+                    String nian = ForData.substring(0,4);
+                    int k = ForData.indexOf("月",5);
+                    int j = ForData.indexOf("日",k+1);
+                    String yue = ForData.substring(5,k);
+                    String ri = ForData.substring(k+1,j);
+                    if(yue.length()==1){
+                        yue="0"+yue;
+                    }
+                    if(ri.length()==1){
+                        ri="0"+ri;
+                    }
+                    String date = nian + "年" + yue + "月" + ri + "日";
                     RequestBody requestBody = new FormBody.Builder()
                             .add("userId",pre.getString("username", ""))
                             .add("eventTitle",Title)
